@@ -1,0 +1,48 @@
+
+
+
+      .then(response =>response.json())
+                .then(result => {
+                    console.log(result)
+                    const stat= JSON.stringfy(result);
+                });
+
+
+
+                document.addEventListener('DOMContentLoaded', function() {
+
+                    document.querySelectorAll('form').forEach(function(form) {
+                        form.addEventListener('submit', function(event) {
+                            event.preventDefault();
+                            var formId = this.id;
+                            
+                            console.log('Form with ID ' + formId + ' was submitted');
+                            console.log("Nah testing jimbrutta")
+                            if(formId==='new-post-form')
+                            {
+                               
+                                let post_text = document.querySelector('#compose-post').value;
+                
+                                console.log("Post text is" + post_text)
+                                console.log("Formid is " + formId)
+                
+                                
+                                fetch('', {
+                                    method: 'POST',
+                                    body: JSON.stringify({
+                                        post_text: post_text,
+                                        form_id: formId
+                                    }),
+                                    credentials: 'same-origin',
+                
+                                });
+                                
+                              
+                                
+                                
+                            }
+                            
+                        });
+                    });
+                });
+                

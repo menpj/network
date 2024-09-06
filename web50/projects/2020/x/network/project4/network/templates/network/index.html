@@ -1,5 +1,20 @@
 {% extends "network/layout.html" %}
+{% load static %}
 
 {% block body %}
-    TODO
+    
+    <script src="{% static 'network/index.js' %}"></script>
+    
+    <div id="new-post">
+        
+        {% if user.is_authenticated %}
+            <h3>New Post</h3>
+            <form id="new-post-form" method="post">
+                {% csrf_token %}
+                <textarea name="postinput" class="form-control" id="compose-post" placeholder="Input Text" ></textarea>
+                <input type="submit" value="Post" class="btn btn-primary"/>
+            </form>
+        {% endif %}
+    </div>
 {% endblock %}
+

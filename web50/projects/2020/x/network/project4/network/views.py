@@ -3,14 +3,36 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+import json
+from .models import User,Post
+from django.utils import timezone
+from django import forms
 
-from .models import User
+
 
 
 def index(request):
-    return render(request, "network/index.html")
 
+    if request.method != 'POST':
 
+        return render(request, "network/index.html")
+    else:
+        print("message received sucessfully")
+
+        data = json.loads(request.body)
+        form_id= data.get("form_id")
+        print(f"This is form id {form_id}")
+        post_text= data.get("post_text")
+        print(f"This is post text {post_text}")
+
+        user = request.user
+        userid= request.user.id
+        print(f"User who made this post is: {user}")
+        print(f"ID of the user is: {userid}")
+        post = Post(userid=user,postcontent=post_text,datetim= timezone.now())
+        post.save()
+        return render(request, "network/index.html")    
+        #return HttpResponseRedirect(reverse("index"))    
 def login_view(request):
     if request.method == "POST":
 
