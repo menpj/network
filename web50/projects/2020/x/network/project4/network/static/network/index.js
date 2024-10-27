@@ -9,13 +9,37 @@ counter = end+1;
 
 
 
-/*fetch(`/posts?start=${start}&end=${end}`)
+/*fetch(`/?start=${start}&end=${end}`)
     .then(response => response.json())
     .then(data => {
         data.posts.forEach(add_post);
     })
 
 };*/ 
+
+
+
+const kws = [
+    'example1',
+    'example2',
+    'example3',
+    // Add more kw objects as needed
+]; 
+
+const container = document.querySelector('#dynamic-posts');
+if (container) {
+    const fragment = document.createDocumentFragment();
+    kws.forEach(content1 => {
+        const post1 = document.createElement('pre');
+        post1.innerHTML = content1;
+        fragment.appendChild(post1);
+    });
+    container.appendChild(fragment);
+} else {
+    console.error('Element with ID "dynamic-posts" not found.');
+}
+
+
 
 
 //fetch(`/posts?start=${start}&end=${end}`);

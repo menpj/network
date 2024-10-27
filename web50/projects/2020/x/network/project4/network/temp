@@ -18,6 +18,46 @@ page_obj.object_list.forEach(content1 => {
 
 
 
+const kws = [
+    'example1',
+    'example2',
+    'example3',
+    // Add more kw objects as needed
+]; 
+
+const container = document.querySelector('#dynamic-posts');
+if (container) {
+    const fragment = document.createDocumentFragment();
+    kws.forEach(content1 => {
+        const post1 = document.createElement('pre');
+        post1.innerHTML = content1;
+        fragment.appendChild(post1);
+    });
+    container.appendChild(fragment);
+} else {
+    console.error('Element with ID "dynamic-posts" not found.');
+}
+
+
+const kws = [
+    'example1',
+    'example2',
+    'example3',
+    // Add more kw objects as needed
+];
+
+
+kws.forEach(content1 => {
+    const post1 = document.createElement('pre');
+    
+    
+    post1.innerHTML = content1;
+    document.querySelector('#dynamic-posts').append(post1);
+    
+});
+
+
+
 {% block content %}
             {% for kw in page_obj %}<pre id={{kw}}>{{kw}}</pre>{% endfor %}
             {% endblock %}
