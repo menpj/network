@@ -7,15 +7,46 @@ import json
 from .models import User,Post
 from django.utils import timezone
 from django import forms
+import time
+from django.http import JsonResponse
+
+from django.core.paginator import Paginator
 
 
-
+#class NewPost(forms.Form):
+#    title = forms.Textarea()
 
 def index(request):
 
     if request.method != 'POST':
 
-        return render(request, "network/index.html")
+        start = int(request.GET.get("start") or 0)
+        end = int(request.GET.get("end") or (start + 19))
+
+        page = int(request.GET.get("page") or 1)
+        data = []
+        for i in range(start, end + 1):
+            data.append(f"Post #{i}")
+
+
+        # Artificially delay speed of response
+        time.sleep(1)
+        paginator = Paginator(data, 5)
+        page_obj = paginator.get_page(page)
+        print(paginator.page(1).object_list)
+
+        print(page_obj)
+
+        # Return list of posts
+        """
+        return JsonResponse({
+            "posts": page_obj.object_list,
+        })
+        """
+
+        return render(request, 'network/index.html', {"page_obj": page_obj})
+
+        #return render(request, "network/index.html")
     else:
         print("message received sucessfully")
 
@@ -32,7 +63,14 @@ def index(request):
         post = Post(userid=user,postcontent=post_text,datetim= timezone.now())
         post.save()
         return render(request, "network/index.html")    
-        #return HttpResponseRedirect(reverse("index"))    
+        #return HttpResponseRedirect(reverse("index"))   
+
+
+
+
+
+
+
 def login_view(request):
     if request.method == "POST":
 
