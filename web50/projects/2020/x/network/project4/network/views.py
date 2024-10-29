@@ -20,33 +20,12 @@ def index(request):
 
     if request.method != 'POST':
 
-        start = int(request.GET.get("start") or 0)
-        end = int(request.GET.get("end") or (start + 19))
+        
+        
 
-        page = int(request.GET.get("page") or 1)
-        data = []
-        for i in range(start, end + 1):
-            data.append(f"Post #{i}")
-
-
-        # Artificially delay speed of response
-        time.sleep(1)
-        paginator = Paginator(data, 5)
-        page_obj = paginator.get_page(page)
-        print(paginator.page(1).object_list)
-
-        print(page_obj)
-
-        # Return list of posts
+        """ return render(request, 'network/index.html', {"page_obj": page_obj,"data":serialized_posts})
         """
-        return JsonResponse({
-            "posts": page_obj.object_list,
-        })
-        """
-
-        return render(request, 'network/index.html', {"page_obj": page_obj})
-
-        #return render(request, "network/index.html")
+        return render(request, "network/index.html")
     else:
         print("message received sucessfully")
 
@@ -64,6 +43,52 @@ def index(request):
         post.save()
         return render(request, "network/index.html")    
         #return HttpResponseRedirect(reverse("index"))   
+
+def get_posts(request):
+
+    print("request received")
+
+    page_number = int(request.GET.get('page') or 1)
+    items_per_page = int(request.GET.get('per_page') or 10)
+
+    page = int(request.GET.get("page") or 1)
+    #if page_number == 1:
+
+    data = []
+    for i in range(0, 100 ):
+        data.append(f"Post #{i}")
+
+    #print(data)
+
+
+    # Artificially delay speed of response
+    time.sleep(1)
+    paginator = Paginator(data, items_per_page)
+
+    page_obj = paginator.get_page(page_number)
+    print(paginator.page(page_number).object_list)
+
+    print(page_obj)
+
+    serialized_posts = [post for post in page_obj]
+
+    print("Serialized Post is:")
+    print(serialized_posts)
+    
+    # serialized_posts = page_obj.serialize()
+    # Return list of posts
+    
+    return JsonResponse({
+        "data": serialized_posts,
+        'meta': {
+        'page': page_obj.number,
+        'per_page': items_per_page,
+        'total_pages': paginator.num_pages,
+        'total_items': paginator.count,
+          
+
+    }
+    })
 
 
 

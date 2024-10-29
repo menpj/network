@@ -1,6 +1,9 @@
 let counter=1;
 const quantity=20;
 
+const page= 1;
+const itemsPerPage = 10;
+
 function load() {
 
 const start = counter;
@@ -9,27 +12,102 @@ counter = end+1;
 
 
 
-/*fetch(`/?start=${start}&end=${end}`)
+
+
+    fetch(`/getposts?page=${page}&per_page=${itemsPerPage}`)
     .then(response => response.json())
     .then(data => {
-        data.posts.forEach(add_post);
+        // Access the meta data
+        const meta = data.meta;
+    
+        add_post(data.data);
+        add_navBar(meta);
     })
+    .catch(error => console.error(error));
 
-};*/ 
+}; 
+
+function add_navBar(meta) {
+
+        console.log('Page:', meta.page);
+        console.log('Items per page:', meta.per_page);
+        console.log('Total pages:', meta.total_pages);
+        console.log('Total items:', meta.total_items);
+        const container = document.querySelector('#nav-bar');
+
+        if(container) {
+            const fragment = document.createDocumentFragment();
+            if(meta.page>1)
+            {
+                const has_previous = document.createElement('a');
+                has_previous.innerHTML= "&laquo; first    ";
+                has_previous.href = 'https://www.example.com';
+                has_previous.id="has-previous";
+                fragment.appendChild(has_previous);
+
+                const previous_page = document.createElement('a');
+                previous_page.innerText = "   previous   ";
+                previous_page.href = "https://www.example.com";
+                previous_page.id = "previous-page";
+                fragment.appendChild(previous_page);
+
+            }
+
+            const current = document.createElement('span');
+            current.innerText="Page " + meta.page + " of " + meta.total_pages + '.  '; 
+            current.className = "current";
+            fragment.appendChild(current);
+
+            if(meta.page<meta.total_pages)
+            {
+                const next_page = document.createElement('a');
+                next_page.innerText = "   next   ";
+                next_page.href = "https://www.example.com";
+                next_page.id = "next-page";
+                fragment.appendChild(next_page);
+                next_page.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    //alert("Next page clicked");
+                    fetch(`/getposts?page=${page+1}&per_page=${itemsPerPage}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            // Access the meta data
+                            const meta = data.meta;
+                        
+                            add_post(data.data);
+                            add_navBar(meta);
+                        })
+                        .catch(error => console.error(error));
+                });
+
+                const has_next = document.createElement('a');
+                has_next.innerHTML= "   last &raquo; ";
+                has_next.href = 'https://www.example.com';
+                has_next.id="has-next";
+                fragment.appendChild(has_next);
+
+                
+
+            }
+            container.appendChild(fragment);
 
 
 
-const kws = [
-    'example1',
-    'example2',
-    'example3',
-    // Add more kw objects as needed
-]; 
+        }
+        else {
+            console.error('Element with ID "nav-bar" not found.');
+        }
 
-const container = document.querySelector('#dynamic-posts');
+
+
+};
+
+function add_post(contents) {
+
+    const container = document.querySelector('#dynamic-posts');
 if (container) {
     const fragment = document.createDocumentFragment();
-    kws.forEach(content1 => {
+    contents.forEach(content1 => {
         const post1 = document.createElement('pre');
         post1.innerHTML = content1;
         fragment.appendChild(post1);
@@ -39,32 +117,6 @@ if (container) {
     console.error('Element with ID "dynamic-posts" not found.');
 }
 
-
-
-
-//fetch(`/posts?start=${start}&end=${end}`);
-
-
-
-
-
-
-// Iterate over the kws array and create HTML elements
-
-
-
-}; 
-
-
-function add_post(contents) {
-
-    // Create new post
-    const post = document.createElement('div');
-    post.className = 'post';
-    post.innerHTML = contents;
-
-    // Add post to DOM
-    document.querySelector('#posts').append(post);
 };
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -74,7 +126,6 @@ document.addEventListener('DOMContentLoaded', function() {
     load();
 
 
-    //document.getElementById("compose-post").value="Input Textss";
 
     function getCookie(name) {
         let cookieValue = null;
@@ -133,6 +184,13 @@ document.addEventListener('DOMContentLoaded', function() {
             
         });
     });
+
+
+
+    
+
+
+    
 });
 
 

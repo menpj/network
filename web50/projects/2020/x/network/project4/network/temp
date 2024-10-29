@@ -1,24 +1,56 @@
-const kws = [
-    'example1',
-    'example2',
-    'example3',
-    // Add more kw objects as needed
-];
+const has_nextlistener = document.querySelector('#has-next');
+
+    if (has_nextlistener) {
+        has_nextlistener.addEventListener('click', function(event) {
+            event.preventDefault();
+            alert("Has next clicked");
+        });
+    } else {
+        console.error('Element with ID "has-next" not found.');
+    }
 
 
-// Iterate over the kws array and create HTML elements
-page_obj.object_list.forEach(content1 => {
-    const post1 = document.createElement('div');
-    post1.id = content1;
-    post1.className="post";
-    post1.innerHTML = content1;
-    document.querySelector('#posts').append(post1);
-    
-});
+    const nextlistener = document.getElementById('next-page');
+
+    if (nextlistener) {
+        nextlistener.addEventListener('click', function(event) {
+            event.preventDefault();
+            alert("Next page clicked");
+        });
+    } else {
+        console.error('Element with ID "next-page" not found.');
+    }
+
+
+fetch(`/getposts?page=${meta.total_pages}&per_page=${itemsPerPage}`)
+            .then(response => response.json())
+            .then(data => {
+                // Access the meta data
+                const meta = data.meta;
+            
+                add_post(data.data);
+                add_navBar(meta);
+            })
+            .catch(error => console.error(error));
 
 
 
-const kws = [
+{% if page_obj.has_previous %}
+    <a href="?page=1">&laquo; first</a>
+    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+{% endif %}
+
+<span class="current">
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+</span>
+
+{% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">next</a>
+    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+{% endif %}
+
+
+/* const kws = [
     'example1',
     'example2',
     'example3',
@@ -37,6 +69,44 @@ if (container) {
 } else {
     console.error('Element with ID "dynamic-posts" not found.');
 }
+
+*/
+
+
+fetch(`/getposts?page=${page}&per_page=${itemsPerPage}`)
+    .then(response => response.json())
+    .then(data => add_post(data.data));
+
+
+.catch(error => console.error(error));
+
+const kws = [
+    'example1',
+    'example2',
+    'example3',
+    // Add more kw objects as needed
+];
+
+
+<div id="posts">
+            {% block content %}
+            {% for kw in page_obj %}<pre id={{kw}}>{{kw}}</pre>{% endfor %}
+            {% endblock %}
+</div>
+
+// Iterate over the kws array and create HTML elements
+page_obj.object_list.forEach(content1 => {
+    const post1 = document.createElement('div');
+    post1.id = content1;
+    post1.className="post";
+    post1.innerHTML = content1;
+    document.querySelector('#posts').append(post1);
+    
+});
+
+
+
+
 
 
 const kws = [
