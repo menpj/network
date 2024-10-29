@@ -143,7 +143,10 @@ def userpage(request, username=None):
 
             #print(posts)
         except Post.DoesNotExist:
-            print("fetching from datbase not working")
+            print("fetching posts from datbase not working")
+        except User.DoesNotExist:
+            print(f"User {username} does not exist.")
+            return render(request, 'network/notFound.html', { "username":username})
 
         page = int(request.GET.get("page") or 1)
         

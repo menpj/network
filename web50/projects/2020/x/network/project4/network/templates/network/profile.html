@@ -5,6 +5,7 @@
     
     <script src="{% static 'network/profile.js' %}"></script>
     <h1>{{username}}'s Profile</h1>
+    
     <div id="new-post">
         
         {% if user.is_authenticated and user.username == username %}
