@@ -6,12 +6,36 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from datetime import datetime
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 
 class User(AbstractUser):
     followers = models.IntegerField(default=0)
     following = models.IntegerField(default=0)
+
+
+class Followers(models.Model):
+    userBeta = models.ForeignKey(User,on_delete=models.CASCADE,related_name="followsUser")
+    userAlpha = models.ForeignKey(User,on_delete=models.CASCADE,related_name="followedByUserBeta")
+
+
+    class Meta:
+        unique_together = ('userBeta', 'userAlpha')
+        
+
+    def clean(self):
+        if self.userBeta == self.userAlpha:
+            raise ValidationError("userBeta and userAlpha cannot be the same user.")
+
     
+    def serialize(self):
+        return {
+            "usernamealpha": self.userBeta.username,
+            "usernamebeta":self.userAlpha.username,
+        }
+    
+    def __str__(self):
+        return f"userBeta {self.userBeta} follows {self.userAlpha}."
 
 
 class Post(models.Model):

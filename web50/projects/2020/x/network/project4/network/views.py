@@ -148,6 +148,7 @@ def userpage(request, username=None):
             print(f"User {username} does not exist.")
             return render(request, 'network/notFound.html', { "username":username})
 
+        
         page = int(request.GET.get("page") or 1)
         
 
