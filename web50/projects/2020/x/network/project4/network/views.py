@@ -166,7 +166,7 @@ def userpage(request, username=None):
         })
         """
 
-        return render(request, 'network/index.html', {"page_obj": page_obj})
+        return render(request, 'network/profile.html', { "username":username, "page_obj": page_obj})
         
         #return render(request, "network/index.html")
     else:
