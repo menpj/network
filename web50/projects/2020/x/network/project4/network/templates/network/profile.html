@@ -3,12 +3,12 @@
 
 {% block body %}
     
-    <script src="{% static 'network/index.js' %}"></script>
-    
+    <script src="{% static 'network/profile.js' %}"></script>
+    <h1>Username</h1>
     <div id="new-post">
         
         {% if user.is_authenticated %}
-            <h3>New Post</h3>
+            <h3>New Post Test</h3>
             <form id="new-post-form" method="post">
                 {% csrf_token %}
                 <textarea name="postinput" class="form-control" id="compose-post" placeholder="Input Text" required></textarea>

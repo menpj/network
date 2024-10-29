@@ -20,22 +20,30 @@ def index(request):
 
     if request.method != 'POST':
 
-        start = int(request.GET.get("start") or 0)
-        end = int(request.GET.get("end") or (start + 19))
+        try:
+            posts = Post.objects.all().order_by('-datetim')
+            #print(posts)
+        except Post.DoesNotExist:
+            print("fetching from datbase not working")
 
         page = int(request.GET.get("page") or 1)
-        data = []
-        for i in range(start, end + 1):
-            data.append(f"Post #{i}")
+        
+
+        """postdat = []
+        for post in posts:
+            #posts_data = {post.userid,post.postid,post.postcontent,post.datetim}
+            posts_data=post.serialize()
+            postdat.append(posts_data)
+        """
+        postdat = [post.serialize() for post in posts]
+        #print(postdat)
 
 
-        # Artificially delay speed of response
-        time.sleep(1)
-        paginator = Paginator(data, 5)
+        paginator = Paginator(postdat, 10)
         page_obj = paginator.get_page(page)
-        print(paginator.page(1).object_list)
+        #print(paginator.page(1).object_list)
 
-        print(page_obj)
+        #print(page_obj)
 
         # Return list of posts
         """
@@ -45,7 +53,7 @@ def index(request):
         """
 
         return render(request, 'network/index.html', {"page_obj": page_obj})
-
+        
         #return render(request, "network/index.html")
     else:
         print("message received sucessfully")
@@ -121,3 +129,59 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+def userpage(request, username=None):
+    
+    if request.method != 'POST':
+        print(f"Username is {username} ")
+        try:
+            #user= User.objects.filter(username=username)
+            
+            user = User.objects.get(username=username)
+            print(f"user is {user}")
+            posts = Post.objects.filter(userid=user).order_by('-datetim')
+
+            #print(posts)
+        except Post.DoesNotExist:
+            print("fetching from datbase not working")
+
+        page = int(request.GET.get("page") or 1)
+        
+
+        
+        postdat = [post.serialize() for post in posts]
+        #print(postdat)
+
+
+        paginator = Paginator(postdat, 10)
+        page_obj = paginator.get_page(page)
+        #print(paginator.page(1).object_list)
+
+        #print(page_obj)
+
+        # Return list of posts
+        """
+        return JsonResponse({
+            "posts": page_obj.object_list,
+        })
+        """
+
+        return render(request, 'network/index.html', {"page_obj": page_obj})
+        
+        #return render(request, "network/index.html")
+    else:
+        print("message received sucessfully")
+
+        data = json.loads(request.body)
+        form_id= data.get("form_id")
+        print(f"This is form id {form_id}")
+        post_text= data.get("post_text")
+        print(f"This is post text {post_text}")
+
+        user = request.user
+        userid= request.user.id
+        print(f"User who made this post is: {user}")
+        print(f"ID of the user is: {userid}")
+        post = Post(userid=user,postcontent=post_text,datetim= timezone.now())
+        post.save()
+        return render(request, "network/profile.html")    

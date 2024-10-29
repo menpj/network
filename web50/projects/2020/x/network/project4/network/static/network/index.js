@@ -1,15 +1,15 @@
-let counter=1;
-const quantity=20;
+/*let counter=1;
+const quantity=10; */
 
 function load() {
 
-const start = counter;
+/* const start = counter;
 const end = start + quantity-1;
 counter = end+1;
 
 
 
-/*fetch(`/posts?start=${start}&end=${end}`)
+fetch(`/posts?start=${start}&end=${end}`)
     .then(response => response.json())
     .then(data => {
         data.posts.forEach(add_post);
@@ -107,6 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
             }
             
+            alert("New Post Sucefully Added");
         });
     });
 });
