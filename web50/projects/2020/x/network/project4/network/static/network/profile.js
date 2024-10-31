@@ -56,7 +56,7 @@
                     console.log("Formid is " + formId)
     
                     
-                    fetch('', {
+                    fetch('/user/menpj', {
                         method: 'POST',
                         headers: {
                             'X-CSRFToken': getCookie('csrftoken'),

@@ -29,28 +29,16 @@ def index(request):
         page = int(request.GET.get("page") or 1)
         
 
-        """postdat = []
-        for post in posts:
-            #posts_data = {post.userid,post.postid,post.postcontent,post.datetim}
-            posts_data=post.serialize()
-            postdat.append(posts_data)
-        """
         postdat = [post.serialize() for post in posts]
         #print(postdat)
 
 
         paginator = Paginator(postdat, 10)
         page_obj = paginator.get_page(page)
-        #print(paginator.page(1).object_list)
-
-        #print(page_obj)
+        
 
         # Return list of posts
-        """
-        return JsonResponse({
-            "posts": page_obj.object_list,
-        })
-        """
+        
 
         return render(request, 'network/index.html', {"page_obj": page_obj})
         
@@ -175,6 +163,7 @@ def userpage(request, username=None):
         #return render(request, "network/index.html")
     else:
         print("message received sucessfully")
+        print(f"Username is {username} ")
 
         data = json.loads(request.body)
         form_id= data.get("form_id")

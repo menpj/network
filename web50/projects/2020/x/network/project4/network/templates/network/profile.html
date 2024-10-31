@@ -5,7 +5,7 @@
     
     <script src="{% static 'network/profile.js' %}"></script>
     <h1>{{username}}'s Profile</h1>
-    
+
     <div id="new-post">
         
         {% if user.is_authenticated and user.username == username %}
@@ -24,7 +24,7 @@
             {% for kw in page_obj %}
                 <div id={{kw.postid}}>
                     
-                        <h4>{{kw.postcontent}}</h2>
+                        <h4>{{kw.postcontent}}</h4>
                         Posted by <a href="/user/{{kw.username}}">{{kw.username}}</a> with ID {{kw.userid}} on
                         {{kw.timestamp}}  ,  Likes: {{kw.likes}}
                         <br>
