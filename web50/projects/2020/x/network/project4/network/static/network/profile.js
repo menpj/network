@@ -1,4 +1,4 @@
-/
+
 
     
     
@@ -45,7 +45,7 @@
                 var formId = this.id;
                 
                 console.log('Form with ID ' + formId + ' was submitted');
-                console.log("Nah testing jimbrutta")
+                
                 if(formId==='new-post-form')
                 {   
                     
@@ -53,10 +53,10 @@
                     let post_text = document.querySelector('#compose-post').value;
     
                     console.log("Post text is" + post_text)
-                    console.log("Formid is " + formId)
+                    console.log("user is alan Formid is " + formId)
     
                     
-                    fetch('/user/menpj', {
+                    fetch('/user/postingfromprofile', {
                         method: 'POST',
                         headers: {
                             'X-CSRFToken': getCookie('csrftoken'),
@@ -70,7 +70,7 @@
                         credentials: 'same-origin'
                         
                         
-                    }).then(location.reload());
+                    }).then(location.reload()); 
                     
                   
                     
