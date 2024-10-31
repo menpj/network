@@ -4,13 +4,14 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 import json
-from .models import User,Post
+from .models import User,Post,Followers
 from django.utils import timezone
 from django import forms
 import time
 from django.http import JsonResponse
 
 from django.core.paginator import Paginator
+from django.db.models import Model
 
 
 #class NewPost(forms.Form):
@@ -136,7 +137,23 @@ def userpage(request, username=None):
             print(f"User {username} does not exist.")
             return render(request, 'network/notFound.html', { "username":username})
 
+        followers = Followers.objects.filter(userAlpha=user).count()
+        following = Followers.objects.filter(userBeta=user).count()
+        try:
+            following_status = Followers.objects.filter(userBeta=request.user,userAlpha=user).get()
+            following_status = True
+            print(f"user is following other guy {following_status}")
+        except Followers.DoesNotExist:
+            following_status=False
+            print(f"user is not following other guy {following_status}")
+            
+        print(f" Number of follower is {followers}")
+        print(f" Number of following is {following}")
         
+        
+        
+            
+
         page = int(request.GET.get("page") or 1)
         
 
@@ -158,7 +175,8 @@ def userpage(request, username=None):
         })
         """
 
-        return render(request, 'network/profile.html', { "username":username, "page_obj": page_obj})
+        return render(request, 'network/profile.html', { "username":username, "page_obj": page_obj, "followers": followers, "following": following , 
+                                                        "following_status":following_status})
         
         #return render(request, "network/index.html")
     else:
