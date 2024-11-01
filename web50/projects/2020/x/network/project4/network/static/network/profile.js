@@ -41,22 +41,58 @@
     
         document.querySelectorAll('form').forEach(function(form) {
             form.addEventListener('submit', function(event) {
-                event.preventDefault();
                 var formId = this.id;
-                
                 console.log('Form with ID ' + formId + ' was submitted');
                 
-                if(formId==='new-post-form')
-                {   
+
+                if(formId =='new-post-form')
+                {
+
+                    event.preventDefault();
                     
-                   
-                    let post_text = document.querySelector('#compose-post').value;
-    
-                    console.log("Post text is" + post_text)
-                    console.log("user is alan Formid is " + formId)
-    
                     
-                    fetch('/user/postingfromprofile', {
+                    
+                    
+                     
+                        
+                    
+                        let post_text = document.querySelector('#compose-post').value;
+        
+                        console.log("Post text is" + post_text)
+                        console.log("user is alan Formid is " + formId)
+        
+                        
+                        fetch('/user/postingfromprofile', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': getCookie('csrftoken'),
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                post_text: post_text,
+                                form_id: formId,
+                                
+                            }),
+                            credentials: 'same-origin'
+                            
+                            
+                        }).then(location.reload()); 
+                        
+                    
+                        
+                        
+                    
+                    
+                    alert("New Post Sucefully Added");
+                }
+                else if(formId == "following_function")
+                {
+                    event.preventDefault();
+                    const username = JSON.parse(document.getElementById('username').textContent);
+                    console.log(username);
+                    alert(`something else happening ${username} `);
+
+                    fetch(`/user/${username}`, {
                         method: 'POST',
                         headers: {
                             'X-CSRFToken': getCookie('csrftoken'),
@@ -70,14 +106,15 @@
                         credentials: 'same-origin'
                         
                         
-                    }).then(location.reload()); 
+                    }).then(location.reload());
                     
-                  
+
+
                     
-                    
+
                 }
                 
-                alert("New Post Sucefully Added");
+                 
             });
         });
     });

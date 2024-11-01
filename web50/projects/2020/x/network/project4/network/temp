@@ -1,3 +1,45 @@
+fetch('/user/postingfromprofile', {
+    method: 'POST',
+    headers: {
+        'X-CSRFToken': getCookie('csrftoken'),
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        post_text: post_text,
+        form_id: formId,
+        
+    }),
+    credentials: 'same-origin'
+    
+    
+}).then(location.reload());
+
+
+
+elif (formId == "following_function")
+                {
+                    event.preventDefault();
+                    alert("Following function submitted");
+                    console.log("Following function submitted")
+                    const data = document.currentScript.dataset;
+                    const username = data.username;
+
+                    console.log(username)
+
+                    
+                }
+
+
+
+
+
+
+
+
+
+
+
+
 {%if user.is_authenticated and user.username != username %}
 
         <form action="{% url 'user' username=username  process='following_function' %}" id="following_function" method="post">

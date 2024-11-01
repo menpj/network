@@ -120,8 +120,32 @@ def register(request):
         return render(request, "network/register.html")
 
 def userpage(request, username=None):
+
+    if request.method == "POST":
+        print("message received sucessfully")
+        print(f"Username is {username} ")
+        
+        if "followingadd" in request.POST:
+
+            print("request to add follower recieved")
+
+        else:   
+
+            data = json.loads(request.body)
+            form_id= data.get("form_id")
+            print(f"This is form id {form_id}")
+            post_text= data.get("post_text")
+            print(f"This is post text {post_text}")
+
+            user = request.user
+            userid= request.user.id
+            print(f"User who made this post is: {user}")
+            print(f"ID of the user is: {userid}")
+            post = Post(userid=user,postcontent=post_text,datetim= timezone.now())
+            post.save()
+            return render(request, "network/profile.html")    
     
-    if request.method != 'POST':
+    else:
         print(f"Username is {username} ")
         try:
             #user= User.objects.filter(username=username)
@@ -184,20 +208,4 @@ def userpage(request, username=None):
                                                         "following_status":following_status})
         
         #return render(request, "network/index.html")
-    else:
-        print("message received sucessfully")
-        print(f"Username is {username} ")
-
-        data = json.loads(request.body)
-        form_id= data.get("form_id")
-        print(f"This is form id {form_id}")
-        post_text= data.get("post_text")
-        print(f"This is post text {post_text}")
-
-        user = request.user
-        userid= request.user.id
-        print(f"User who made this post is: {user}")
-        print(f"ID of the user is: {userid}")
-        post = Post(userid=user,postcontent=post_text,datetim= timezone.now())
-        post.save()
-        return render(request, "network/profile.html")    
+    
