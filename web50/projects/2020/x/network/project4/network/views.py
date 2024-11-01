@@ -135,20 +135,25 @@ def userpage(request, username=None):
             print("fetching posts from datbase not working")
         except User.DoesNotExist:
             print(f"User {username} does not exist.")
-            return render(request, 'network/notFound.html', { "username":username})
+            return render(request, 'network/UserNotFound.html', { "username":username})
+            
 
         followers = Followers.objects.filter(userAlpha=user).count()
         following = Followers.objects.filter(userBeta=user).count()
-        try:
-            following_status = Followers.objects.filter(userBeta=request.user,userAlpha=user).get()
-            following_status = True
-            print(f"user is following other guy {following_status}")
-        except Followers.DoesNotExist:
-            following_status=False
-            print(f"user is not following other guy {following_status}")
+        following_status=None
+        if request.user.is_authenticated:
+            try:
+                following_status = Followers.objects.filter(userBeta=request.user,userAlpha=user).get()
+                following_status = True
+                print(f"user is following other guy {following_status}")
+            except Followers.DoesNotExist:
+                following_status=False
+                print(f"user is not following other guy {following_status}")
             
-        print(f" Number of follower is {followers}")
-        print(f" Number of following is {following}")
+            print(f" Number of follower is {followers}")
+            print(f" Number of following is {following}")
+            
+        
         
         
         
