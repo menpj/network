@@ -1,4 +1,4 @@
-fetch('/user/postingfromprofile', {
+fetch(`/user/${username}`, {
     method: 'POST',
     headers: {
         'X-CSRFToken': getCookie('csrftoken'),
@@ -13,7 +13,6 @@ fetch('/user/postingfromprofile', {
     
     
 }).then(location.reload());
-
 
 
 elif (formId == "following_function")

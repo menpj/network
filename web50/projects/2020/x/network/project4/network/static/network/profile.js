@@ -90,8 +90,11 @@
                     event.preventDefault();
                     const username = JSON.parse(document.getElementById('username').textContent);
                     console.log(username);
-                    alert(`something else happening ${username} `);
-
+                    //alert(`something else weird is  happening ${username} `);
+                    console.log("Post text is" + post_text)
+                    console.log("user is alan Formid is " + formId)
+                    //thisurl= ''
+                        
                     fetch(`/user/${username}`, {
                         method: 'POST',
                         headers: {
@@ -106,7 +109,8 @@
                         credentials: 'same-origin'
                         
                         
-                    }).then(location.reload());
+                    }).then(location.reload()); 
+                    
                     
 
 

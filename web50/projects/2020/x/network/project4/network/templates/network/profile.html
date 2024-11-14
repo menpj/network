@@ -12,7 +12,7 @@
 
         <form action="{% url 'userpage' username=username %}" id="following_function" method="post">
             {% csrf_token %}
-            {% if following %}
+            {% if following_status %}
                 <input type="hidden" name="followingremove" value="form1">
                 <input type="submit",id='following_function',name= "following_function", value="Unfollow">
             {%else%}

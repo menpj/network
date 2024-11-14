@@ -125,10 +125,30 @@ def userpage(request, username=None):
         print("message received sucessfully")
         print(f"Username is {username} ")
         
+        #print(f"user is {user}")
+        
         if "followingadd" in request.POST:
-
-            print("request to add follower recieved")
-
+            try:
+                user = User.objects.get(username=username)
+                following_add = Followers(userBeta=request.user,userAlpha=user)
+                following_add.save()
+                print("request to add follower recieved")
+            except:
+                print("Error in database operations");
+                return JsonResponse({
+                "error": "Error in database operations try again."
+                    }, status=400)
+            return JsonResponse({
+            "message": "Sucessfully follower added."
+                }, status=400)
+        elif "followingremove" in request.POST:
+            user = User.objects.get(username=username)
+            following_remove = Followers.objects.get(userBeta=request.user,userAlpha=user)
+            following_remove.delete()
+            print("request to remove follower recieved")
+            return JsonResponse({
+            "message": "Sucessfully follower removed."
+                }, status=400)
         else:   
 
             data = json.loads(request.body)
@@ -204,8 +224,10 @@ def userpage(request, username=None):
         })
         """
 
+        
+    
         return render(request, 'network/profile.html', { "username":username, "page_obj": page_obj, "followers": followers, "following": following , 
                                                         "following_status":following_status})
         
         #return render(request, "network/index.html")
-    
+       
