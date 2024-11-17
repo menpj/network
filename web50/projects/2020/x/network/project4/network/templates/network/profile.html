@@ -10,17 +10,15 @@
     <h5>{{following}} Following   &emsp;   {{followers}} Followers  </h5>
     {%if user.is_authenticated and user.username != username %}
 
-        <form action="{% url 'userpage' username=username %}" id="following_function" method="post">
+        <div id="following_function">    
             {% csrf_token %}
             {% if following_status %}
-                <input type="hidden" name="followingremove" value="form1">
-                <input type="submit",id='following_function',name= "following_function", value="Unfollow">
+                <button id='following_remove',name= "following_button", value="Unfollow">Unfollow</button>
             {%else%}
-                <input type="hidden" name="followingadd" value="form1">
-                <input type="submit",id='following_function',name= "following_function", value="Follow">
+                <button id='following_add',name= "following_button", value="Follow">Follow</button>
             {%endif%}
-            
-        </form>
+        </div>
+        
 
     {% endif %}
 
@@ -38,6 +36,10 @@
     </div>
 
     <body>
+        <div id="latest_post">
+            
+            
+        </div>
         <div id="posts">
             {% block content %}
             {% for kw in page_obj %}

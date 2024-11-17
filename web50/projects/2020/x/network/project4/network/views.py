@@ -125,6 +125,7 @@ def userpage(request, username=None):
         print("message received sucessfully")
         print(f"Username is {username} ")
         
+       
         #print(f"user is {user}")
         
         if "followingadd" in request.POST:
@@ -150,20 +151,34 @@ def userpage(request, username=None):
             "message": "Sucessfully follower removed."
                 }, status=400)
         else:   
-
+            
             data = json.loads(request.body)
-            form_id= data.get("form_id")
-            print(f"This is form id {form_id}")
-            post_text= data.get("post_text")
-            print(f"This is post text {post_text}")
+            request_type = data.get('request_type')
+            
 
-            user = request.user
-            userid= request.user.id
-            print(f"User who made this post is: {user}")
-            print(f"ID of the user is: {userid}")
-            post = Post(userid=user,postcontent=post_text,datetim= timezone.now())
-            post.save()
-            return render(request, "network/profile.html")    
+            if request_type == 'addpost':
+
+                print("add post assed")
+                data = json.loads(request.body)
+                form_id= data.get("form_id")
+                print(f"This is form id {form_id}")
+                post_text= data.get("post_text")
+                print(f"This is post text {post_text}")
+
+                user = request.user
+                userid= request.user.id
+                print(f"User who made this post is: {user}")
+                print(f"ID of the user is: {userid}")
+                post = Post(userid=user,postcontent=post_text,datetim= timezone.now())
+                post.save()
+                print(f"this is post data now: {post}")
+                print(f"type of post is {type(post)}")
+                postdat = post.serialize()
+                print(f"This is postdata: {postdat}")
+                print(f"type of postdat: {type(postdat)}")
+                message= "Post added sucessfully."
+                newpostcontext= {"message":message,"postdata":postdat}
+                return JsonResponse(newpostcontext, status=200)    
     
     else:
         print(f"Username is {username} ")
