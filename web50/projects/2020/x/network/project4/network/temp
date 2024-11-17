@@ -1,3 +1,75 @@
+print("message received sucessfully")
+
+data = json.loads(request.body)
+form_id= data.get("form_id")
+print(f"This is form id {form_id}")
+post_text= data.get("post_text")
+print(f"This is post text {post_text}")
+
+user = request.user
+userid= request.user.id
+print(f"User who made this post is: {user}")
+print(f"ID of the user is: {userid}")
+post = Post(userid=user,postcontent=post_text,datetim= timezone.now())
+post.save()
+return render(request, "network/index.html")    
+#return HttpResponseRedirect(reverse("index"))   
+
+
+
+
+
+
+
+
+
+
+
+if(formId==='new-post-form')
+    {   
+        
+       
+        let post_text = document.querySelector('#compose-post').value;
+
+        console.log("Post text is" + post_text)
+        console.log("Formid is " + formId)
+
+        
+        fetch('', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                post_text: post_text,
+                form_id: formId,
+                
+            }),
+            credentials: 'same-origin'
+            
+            
+        }).then(location.reload());
+        
+      
+        
+        
+    }
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 place at follow button place at profile.js
 
 var button = document.getElementById("following_add");

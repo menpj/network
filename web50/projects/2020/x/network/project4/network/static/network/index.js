@@ -76,16 +76,13 @@ document.addEventListener('DOMContentLoaded', function() {
             
             console.log('Form with ID ' + formId + ' was submitted');
             console.log("Nah testing jimbrutta")
-            if(formId==='new-post-form')
-            {   
-                
-               
+            
+            if (formId === 'new-post-form') {
+                event.preventDefault();
                 let post_text = document.querySelector('#compose-post').value;
-
-                console.log("Post text is" + post_text)
-                console.log("Formid is " + formId)
-
-                
+    
+                console.log("Post text is " + post_text);
+                console.log("User is Alan. Form ID is " + formId);
                 fetch('', {
                     method: 'POST',
                     headers: {
@@ -93,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        "request_type":"addpost",
                         post_text: post_text,
                         form_id: formId,
                         
@@ -100,14 +98,37 @@ document.addEventListener('DOMContentLoaded', function() {
                     credentials: 'same-origin'
                     
                     
-                }).then(location.reload());
-                
-              
-                
+                }).then(response => response.json()).then(response_message =>{
+                    var textarea = document.getElementById('compose-post');
+                    textarea.value = ''; // Clear the value
+                    console.log(response_message);
+                    if(response_message.message== "Post added sucessfully.")
+                    {
+                        console.log("message received successfully");
+                        alert("New Post Successfully Added");
+                        var post = document.createElement('div');
+                        
+                        var postdata= response_message.postdata;
+                        post.id = response_message.postdata.postid;
+
+                        post.innerHTML=  `
+                            <h4>${postdata.postcontent}</h4>
+                            Posted by <a href="/user/${postdata.username}">${postdata.username}</a> with ID ${postdata.userid} on
+                            ${postdata.timestamp} , Likes: ${postdata.likes}
+                            <br><br>
+                        `;
+                        var latestPostContainer = document.querySelector("#posts");
+                        document.querySelector("#posts").insertBefore(post, latestPostContainer.firstChild);
+
+                    }
+                    //alert("something crazy happening");
+                   
+                    
+                }); 
+    
                 
             }
-            
-            alert("New Post Sucefully Added");
+            //alert("New Post Sucefully Added");
         });
     });
 });
