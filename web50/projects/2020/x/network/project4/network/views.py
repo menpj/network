@@ -142,21 +142,8 @@ def userpage(request, username=None):
        
         #print(f"user is {user}")
         
-        if "followingadd" in request.POST:
-            try:
-                user = User.objects.get(username=username)
-                following_add = Followers(userBeta=request.user,userAlpha=user)
-                following_add.save()
-                print("request to add follower recieved")
-            except:
-                print("Error in database operations");
-                return JsonResponse({
-                "error": "Error in database operations try again."
-                    }, status=400)
-            return JsonResponse({
-            "message": "Sucessfully follower added."
-                }, status=400)
-        elif "followingremove" in request.POST:
+        
+        if "followingremove" in request.POST:
             user = User.objects.get(username=username)
             following_remove = Followers.objects.get(userBeta=request.user,userAlpha=user)
             following_remove.delete()
@@ -169,7 +156,7 @@ def userpage(request, username=None):
             data = json.loads(request.body)
             request_type = data.get('request_type')
             
-
+            print("this is being executed")
             if request_type == 'addpost':
 
                 print("add post assed")
@@ -192,9 +179,26 @@ def userpage(request, username=None):
                 print(f"type of postdat: {type(postdat)}")
                 message= "Post added sucessfully."
                 newpostcontext= {"message":message,"postdata":postdat}
-                return JsonResponse(newpostcontext, status=200)    
+                return JsonResponse(newpostcontext, status=200)   
+            elif request_type== 'followUser':
+                print("request for follwoing user received")
+                try:
+                    user = User.objects.get(username=username)
+                    following_add = Followers(userBeta=request.user,userAlpha=user)
+                    following_add.save()
+                    print("request to add follower recieved")
+                except:
+                    print("Error in database operations");
+                    return JsonResponse({
+                    "error": "Error in database operations try again."
+                        }, status=400)
+                return JsonResponse({
+                "message": "Sucessfully follower added."
+                    }, status=400)
+
     
     else:
+        print("unwanted is being executed")
         print(f"Username is {username} ")
         try:
             #user= User.objects.filter(username=username)

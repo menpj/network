@@ -84,8 +84,48 @@
 
         
        //code for follow button was situated here
+       const isAuthenticated = JSON.parse(document.getElementById('is_authenticated').textContent);
+       const username = JSON.parse(document.getElementById('username').textContent);
+       const profileusername = JSON.parse(document.getElementById('profileusername').textContent);
 
-    
+       console.log("testing button data");
+       console.log(`${isAuthenticated} is status,  ${username} is username, ${profileusername} `);
+       if(isAuthenticated==true && username!=profileusername)
+       {
+            console.log("different person follow button should be there");
+            var button = document.getElementById("following_add");
+
+            // Add a click event listener to the button
+            button.addEventListener("click", function() {
+            console.log("button clicked");
+            //alert("Button with id 'following_add' was clicked!");
+            
+            //alert(`something else weird is  happening ${username} `);
+
+
+                
+            fetch(`/user/${profileusername}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "request_type": "followUser",
+                    "followingadd": true,
+                    
+                }),
+                credentials: 'same-origin'
+                
+                
+            }).then(location.reload()); 
+
+            }); 
+       }
+       else
+       {
+        console.log("same person or not logged in");
+       }
 
     
         //document.getElementById("compose-post").value="Input Textss";

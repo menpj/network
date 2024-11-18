@@ -3,8 +3,14 @@
 
 {% block body %}
     
+
+
     <script src="{% static 'network/profile.js' %}"></script>
-    {{ username|json_script:"username" }}
+    {{ username|json_script:"profileusername" }}
+    {{ user.is_authenticated|json_script:"is_authenticated" }}
+    {{ user.username|json_script:"username" }}
+    
+
     <h1>{{username}}'s Profile</h1>
     
     <h5>{{following}} Following   &emsp;   {{followers}} Followers  </h5>
