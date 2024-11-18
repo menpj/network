@@ -1,3 +1,7 @@
+<button id='following_add' name= "following_button" value="Follow",style="display: none;">Follow</button>
+
+
+
 print("message received sucessfully")
 
 data = json.loads(request.body)

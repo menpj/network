@@ -19,9 +19,11 @@
         <div id="following_function">    
             {% csrf_token %}
             {% if following_status %}
-                <button id='following_remove',name= "following_button", value="Unfollow">Unfollow</button>
+                <button id='following_remove' name= "following_button" value="Unfollow" style="display: block;">Unfollow</button>
+                <button id='following_add' name= "following_add" value="Follow" style="display: none;">Follow</button>
             {%else%}
-                <button id='following_add',name= "following_button", value="Follow">Follow</button>
+                <button id='following_add' name= "following_add" value="Follow" style="display: block;">Follow</button>
+                <button id='following_remove' name= "following_remove" value="Unfollow" style="display: none;">Unfollow</button>
             {%endif%}
         </div>
         

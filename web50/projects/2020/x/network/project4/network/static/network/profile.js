@@ -118,8 +118,49 @@
                 credentials: 'same-origin'
                 
                 
-            }).then(location.reload()); 
+            }).then(response => response.json()).then(response_message =>{
+                //var followadd = document.getElementById('following_add');
+                //var followremove = document.getElementById('following_remove');
 
+                //followremove.style.display = 'block';
+                //followingadd.style.display = 'none';
+                
+                document.getElementById('following_add').style.display = 'none';
+                document.getElementById('following_remove').style.display = 'block';
+                
+
+
+
+                
+
+                /*
+                textarea.value = ''; 
+                console.log(response_message);
+                if(response_message.message== "Post added sucessfully.")
+                {
+                    console.log("message received successfully");
+                    alert("New Post Successfully Added");
+                    var post = document.createElement('div');
+                    
+                    var postdata= response_message.postdata;
+                    post.id = response_message.postdata.postid;
+
+                    post.innerHTML=  `
+                        <h4>${postdata.postcontent}</h4>
+                        Posted by <a href="/user/${postdata.username}">${postdata.username}</a> with ID ${postdata.userid} on
+                        ${postdata.timestamp} , Likes: ${postdata.likes}
+                        <br><br>
+                    `;
+                    var latestPostContainer = document.querySelector("#latest_post");
+                    document.querySelector("#latest_post").insertBefore(post, latestPostContainer.firstChild); 
+                    
+
+                }
+                    */
+                //alert("something crazy happening");
+               
+                
+            }); 
             }); 
        }
        else
