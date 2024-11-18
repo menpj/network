@@ -118,50 +118,111 @@
                 credentials: 'same-origin'
                 
                 
-            }).then(response => response.json()).then(response_message =>{
-                //var followadd = document.getElementById('following_add');
-                //var followremove = document.getElementById('following_remove');
-
-                //followremove.style.display = 'block';
-                //followingadd.style.display = 'none';
-                
-                document.getElementById('following_add').style.display = 'none';
-                document.getElementById('following_remove').style.display = 'block';
-                
-
-
-
-                
-
-                /*
-                textarea.value = ''; 
-                console.log(response_message);
-                if(response_message.message== "Post added sucessfully.")
+            }).then(response => {
+                    if(response.status==200) {
+                    response.json().then(response_message =>{
+                    //var followadd = document.getElementById('following_add');
+                    //var followremove = document.getElementById('following_remove');
+    
+                    //followremove.style.display = 'block';
+                    //followingadd.style.display = 'none';
+                    
+                    document.getElementById('following_add').style.display = 'none';
+                    document.getElementById('following_remove').style.display = 'block';
+                    
+    
+    
+    
+                    
+    
+                    /*
+                    textarea.value = ''; 
+                    console.log(response_message);
+                    if(response_message.message== "Post added sucessfully.")
+                    {
+                        console.log("message received successfully");
+                        alert("New Post Successfully Added");
+                        var post = document.createElement('div');
+                        
+                        var postdata= response_message.postdata;
+                        post.id = response_message.postdata.postid;
+    
+                        post.innerHTML=  `
+                            <h4>${postdata.postcontent}</h4>
+                            Posted by <a href="/user/${postdata.username}">${postdata.username}</a> with ID ${postdata.userid} on
+                            ${postdata.timestamp} , Likes: ${postdata.likes}
+                            <br><br>
+                        `;
+                        var latestPostContainer = document.querySelector("#latest_post");
+                        document.querySelector("#latest_post").insertBefore(post, latestPostContainer.firstChild); 
+                        
+    
+                    }
+                        */
+                    //alert("something crazy happening");
+                   
+                    
+                }); }
+                else
                 {
-                    console.log("message received successfully");
-                    alert("New Post Successfully Added");
-                    var post = document.createElement('div');
-                    
-                    var postdata= response_message.postdata;
-                    post.id = response_message.postdata.postid;
-
-                    post.innerHTML=  `
-                        <h4>${postdata.postcontent}</h4>
-                        Posted by <a href="/user/${postdata.username}">${postdata.username}</a> with ID ${postdata.userid} on
-                        ${postdata.timestamp} , Likes: ${postdata.likes}
-                        <br><br>
-                    `;
-                    var latestPostContainer = document.querySelector("#latest_post");
-                    document.querySelector("#latest_post").insertBefore(post, latestPostContainer.firstChild); 
-                    
-
+                    console.log("Error occured resubmit");
                 }
-                    */
-                //alert("something crazy happening");
-               
+
+            })
+            }); 
+
+
+            var removebutton = document.getElementById("following_remove");
+
+            // Add a click event listener to the button
+            removebutton.addEventListener("click", function() {
+            console.log("button clicked");
+            //alert("Button with id 'following_add' was clicked!");
+            
+            //alert(`something else weird is  happening ${username} `);
+
+
                 
+            fetch(`/user/${profileusername}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "request_type": "removeFollow",
+                    "followingremove": true,
+                    
+                }),
+                credentials: 'same-origin'
+                
+                
+            }).then(response => {
+                    if(response.status==200) {
+                    response.json().then(response_message =>{
+                    //var followadd = document.getElementById('following_add');
+                    //var followremove = document.getElementById('following_remove');
+    
+                    //followremove.style.display = 'block';
+                    //followingadd.style.display = 'none';
+                    console.log("follower removed sucessfully");
+                    document.getElementById('following_remove').style.display = 'none';
+                    document.getElementById('following_add').style.display = 'block';
+                    
+                   
+                    
+                }); }
+                else
+                {
+                    console.log("Error occured resubmit");
+                }
+
+            })
             }); 
-            }); 
+
+
+
+
        }
        else
        {

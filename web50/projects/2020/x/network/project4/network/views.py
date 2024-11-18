@@ -194,7 +194,29 @@ def userpage(request, username=None):
                         }, status=400)
                 return JsonResponse({
                 "message": "Sucessfully follower added."
-                    }, status=400)
+                    }, status=200)
+            
+
+            elif request_type== 'removeFollow':
+                print("request for request for removing user  follow received")
+                
+            
+                try:
+                    user = User.objects.get(username=username)
+                    following_remove = Followers.objects.get(userBeta=request.user,userAlpha=user)
+                    following_remove.delete()
+                    print("follower removed from database sucessfully")
+                except:
+                    print("Error in database operations");
+                    return JsonResponse({
+                    "error": "Error in database operations try again."
+                        }, status=400)
+                return JsonResponse({
+                "message": "Sucessfully follower removed."
+                    }, status=200)
+            
+
+
 
     
     else:
