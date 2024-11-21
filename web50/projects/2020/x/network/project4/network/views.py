@@ -9,6 +9,7 @@ from django.utils import timezone
 from django import forms
 import time
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 from django.core.paginator import Paginator
 from django.db.models import Model
@@ -74,6 +75,38 @@ def index(request):
             message= "Post added sucessfully."
             newpostcontext= {"message":message,"postdata":postdat}
             return JsonResponse(newpostcontext, status=200)    
+    
+@login_required
+def following(request):
+
+    if request.method != 'POST':
+
+        try:
+            following_names= Followers.objects.filter(userBeta=request.user).values_list('userAlpha')
+            #posts = Post.objects.all().order_by('-datetim')
+            posts = Post.objects.filter(userid__in=following_names).order_by('-datetim')
+            #print(posts)
+        except Post.DoesNotExist:
+            print("fetching from datbase not working")
+
+        page = int(request.GET.get("page") or 1)
+        
+
+        postdat = [post.serialize() for post in posts]
+        #print(postdat)
+
+
+        paginator = Paginator(postdat, 10)
+        page_obj = paginator.get_page(page)
+        
+
+        # Return list of posts
+        
+
+        return render(request, 'network/following.html', {"page_obj": page_obj})
+        
+        #return render(request, "network/index.html")
+    
     
 
 
@@ -143,77 +176,69 @@ def userpage(request, username=None):
         #print(f"user is {user}")
         
         
-        if "followingremove" in request.POST:
-            user = User.objects.get(username=username)
-            following_remove = Followers.objects.get(userBeta=request.user,userAlpha=user)
-            following_remove.delete()
-            print("request to remove follower recieved")
+           
+            
+        data = json.loads(request.body)
+        request_type = data.get('request_type')
+        
+        print("this is being executed")
+        if request_type == 'addpost':
+
+            print("add post assed")
+            data = json.loads(request.body)
+            form_id= data.get("form_id")
+            print(f"This is form id {form_id}")
+            post_text= data.get("post_text")
+            print(f"This is post text {post_text}")
+
+            user = request.user
+            userid= request.user.id
+            print(f"User who made this post is: {user}")
+            print(f"ID of the user is: {userid}")
+            post = Post(userid=user,postcontent=post_text,datetim= timezone.now())
+            post.save()
+            print(f"this is post data now: {post}")
+            print(f"type of post is {type(post)}")
+            postdat = post.serialize()
+            print(f"This is postdata: {postdat}")
+            print(f"type of postdat: {type(postdat)}")
+            message= "Post added sucessfully."
+            newpostcontext= {"message":message,"postdata":postdat}
+            return JsonResponse(newpostcontext, status=200)   
+        elif request_type== 'followUser':
+            print("request for follwoing user received")
+            try:
+                user = User.objects.get(username=username)
+                following_add = Followers(userBeta=request.user,userAlpha=user)
+                following_add.save()
+                print("request to add follower recieved")
+            except:
+                print("Error in database operations");
+                return JsonResponse({
+                "error": "Error in database operations try again."
+                    }, status=400)
+            return JsonResponse({
+            "message": "Sucessfully follower added."
+                }, status=200)
+        
+
+        elif request_type== 'removeFollow':
+            print("request for request for removing user  follow received")
+            
+        
+            try:
+                user = User.objects.get(username=username)
+                following_remove = Followers.objects.get(userBeta=request.user,userAlpha=user)
+                following_remove.delete()
+                print("follower removed from database sucessfully")
+            except:
+                print("Error in database operations");
+                return JsonResponse({
+                "error": "Error in database operations try again."
+                    }, status=400)
             return JsonResponse({
             "message": "Sucessfully follower removed."
-                }, status=400)
-        else:   
-            
-            data = json.loads(request.body)
-            request_type = data.get('request_type')
-            
-            print("this is being executed")
-            if request_type == 'addpost':
-
-                print("add post assed")
-                data = json.loads(request.body)
-                form_id= data.get("form_id")
-                print(f"This is form id {form_id}")
-                post_text= data.get("post_text")
-                print(f"This is post text {post_text}")
-
-                user = request.user
-                userid= request.user.id
-                print(f"User who made this post is: {user}")
-                print(f"ID of the user is: {userid}")
-                post = Post(userid=user,postcontent=post_text,datetim= timezone.now())
-                post.save()
-                print(f"this is post data now: {post}")
-                print(f"type of post is {type(post)}")
-                postdat = post.serialize()
-                print(f"This is postdata: {postdat}")
-                print(f"type of postdat: {type(postdat)}")
-                message= "Post added sucessfully."
-                newpostcontext= {"message":message,"postdata":postdat}
-                return JsonResponse(newpostcontext, status=200)   
-            elif request_type== 'followUser':
-                print("request for follwoing user received")
-                try:
-                    user = User.objects.get(username=username)
-                    following_add = Followers(userBeta=request.user,userAlpha=user)
-                    following_add.save()
-                    print("request to add follower recieved")
-                except:
-                    print("Error in database operations");
-                    return JsonResponse({
-                    "error": "Error in database operations try again."
-                        }, status=400)
-                return JsonResponse({
-                "message": "Sucessfully follower added."
-                    }, status=200)
-            
-
-            elif request_type== 'removeFollow':
-                print("request for request for removing user  follow received")
-                
-            
-                try:
-                    user = User.objects.get(username=username)
-                    following_remove = Followers.objects.get(userBeta=request.user,userAlpha=user)
-                    following_remove.delete()
-                    print("follower removed from database sucessfully")
-                except:
-                    print("Error in database operations");
-                    return JsonResponse({
-                    "error": "Error in database operations try again."
-                        }, status=400)
-                return JsonResponse({
-                "message": "Sucessfully follower removed."
-                    }, status=200)
+                }, status=200)
             
 
 
