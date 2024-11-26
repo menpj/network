@@ -131,6 +131,24 @@ document.addEventListener('DOMContentLoaded', function() {
             //alert("New Post Sucefully Added");
         });
     });
+
+    var edit= document.querySelectorAll(".edit_link");
+    edit.forEach(function(post){
+        post.addEventListener('click',function(event) {
+
+            event.preventDefault();
+            console.log("edit link clicked");
+            var post = this.getAttribute('data-post');
+            var id = this.getAttribute('data-id');
+            console.log('Data Info:', post);
+            console.log('Data ID:', id);
+            //console.log('Post ID:',this.id);
+            var postelement = document.getElementById(id);
+            postelement.innerHTML="Noah Paul Jose";
+        });
+
+    });
+    
 });
 
 
