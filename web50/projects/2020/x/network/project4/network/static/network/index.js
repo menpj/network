@@ -68,6 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     
+    
 
     document.querySelectorAll('form').forEach(function(form) {
         form.addEventListener('submit', function(event) {
@@ -77,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Form with ID ' + formId + ' was submitted');
             console.log("Nah testing jimbrutta")
             
-            if (formId === 'new-post-form') {
+            if (formId === 'new-post-form' || formId==='new-post-forms') {
                 event.preventDefault();
                 let post_text = document.querySelector('#compose-post').value;
     
@@ -144,10 +145,90 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Data ID:', id);
             //console.log('Post ID:',this.id);
             var postelement = document.getElementById(id);
-            postelement.innerHTML="Noah Paul Jose";
+            const csrftoken = getCookie('csrftoken');
+            postelement.innerHTML=`<form name="new-post-forms" id="${id}" method="post">
+            <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">
+            <textarea name="postinput" class="form-control" id="compose-posts-${id}" required>${post}</textarea>
+            <input type="submit" value="Post" class="btn btn-primary"/>
+        </form>`;
+        
+
+        document.querySelectorAll('form').forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+        //document.getElementById('new-post-forms').addEventListener('submit', function(event) {
+        
+            event.preventDefault();
+            // Your form submission logic here
+            
+            var formName = this.name;
+            var formId = this.id;
+            
+            console.log('Form with name ' + formName + ' was submitted');
+            console.log("Nah testing jimbrutta")
+            
+            if (formName==='new-post-forms') {
+                event.preventDefault();
+                let post_text = document.querySelector(`#compose-posts-${formId}`).value;
+    
+                console.log("Post text is " + post_text);
+                console.log("User is Alan. Form ID is " + formId);
+                fetch('', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "request_type":"addpost",
+                        post_text: post_text,
+                        form_id: formName,
+                        
+                    }),
+                    credentials: 'same-origin'
+                    
+                    
+                }).then(response => response.json()).then(response_message =>{
+                    var textarea = document.getElementById('compose-post');
+                    textarea.value = ''; // Clear the value
+                    console.log(response_message);
+                    if(response_message.message== "Post added sucessfully.")
+                    {
+                        console.log("message received successfully");
+                        alert("New Post Successfully Added");
+                        var post = document.createElement('div');
+                        
+                        var postdata= response_message.postdata;
+                        post.id = response_message.postdata.postid;
+    
+                        post.innerHTML=  `
+                            <h4>${postdata.postcontent}</h4>
+                            Posted by <a href="/user/${postdata.username}">${postdata.username}</a> with ID ${postdata.userid} on
+                            ${postdata.timestamp} , Likes: ${postdata.likes}
+                            <br><br>
+                        `;
+                        var latestPostContainer = document.querySelector("#posts");
+                        document.querySelector("#posts").insertBefore(post, latestPostContainer.firstChild);
+    
+                    }
+                    //alert("something crazy happening");
+                   
+                    
+                }); 
+    
+                
+            }
+            
+    
+    
+            console.log('Form submitted!');
+        }); });
         });
 
     });
+
+    
+
+    
     
 });
 
