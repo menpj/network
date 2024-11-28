@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Form with ID ' + formId + ' was submitted');
             console.log("Nah testing jimbrutta")
             
-            if (formId === 'new-post-form' || formId==='new-post-forms') {
+            if (formId === 'new-post-form') {
                 event.preventDefault();
                 let post_text = document.querySelector('#compose-post').value;
     
@@ -152,21 +152,26 @@ document.addEventListener('DOMContentLoaded', function() {
             <input type="submit" value="Post" class="btn btn-primary"/>
         </form>`;
         
-
-        document.querySelectorAll('form').forEach(function(form) {
-            form.addEventListener('submit', function(event) {
+        var form_name= document.getElementById(id);
+        
+            form_name.addEventListener('submit', function(event) {
         //document.getElementById('new-post-forms').addEventListener('submit', function(event) {
         
             event.preventDefault();
             // Your form submission logic here
             
-            var formName = this.name;
+            
+
+            
+            
+
             var formId = this.id;
             
-            console.log('Form with name ' + formName + ' was submitted');
+            //console.log('Form with name ' + formName + ' was submitted');
+            console.log('Form id is ' + formId );
             console.log("Nah testing jimbrutta")
             
-            if (formName==='new-post-forms') {
+            if (formId===id) {
                 event.preventDefault();
                 let post_text = document.querySelector(`#compose-posts-${formId}`).value;
     
@@ -181,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     body: JSON.stringify({
                         "request_type":"addpost",
                         post_text: post_text,
-                        form_id: formName,
+                        form_id: formId,
                         
                     }),
                     credentials: 'same-origin'
@@ -221,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     
             console.log('Form submitted!');
-        }); });
+        }); 
         });
 
     });
