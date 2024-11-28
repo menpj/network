@@ -76,6 +76,40 @@ def index(request):
             newpostcontext= {"message":message,"postdata":postdat}
             return JsonResponse(newpostcontext, status=200)    
     
+        elif request_type== 'editpost':
+
+            print("edit post request received in server")
+            data = json.loads(request.body)
+            post_id= data.get("post_id")
+            print(f"This is form id {post_id}")
+            post_text= data.get("post_text")
+            print(f"This is post text {post_text}")
+
+            user = request.user
+            userid= request.user.id
+            print(f"User who made this post is: {user}")
+            print(f"ID of the user is: {userid}")
+            #post = Post(userid=user,postcontent=post_text,datetim= timezone.now())
+            try:
+                post = Post.objects.get(postid=post_id)
+                post.postcontent = post_text
+                post.save()
+            except:
+                print("Error in database operations");
+                return JsonResponse({
+                "error": "Error in database operations try again."
+                    }, status=400)   
+
+                
+            print(f"this is post data now: {post}")
+            print(f"type of post is {type(post)}")
+            postdat = post.serialize()
+            print(f"This is postdata: {postdat}")
+            print(f"type of postdat: {type(postdat)}")
+            message= "Post edited sucessfully."
+            newpostcontext= {"message":message,"postdata":postdat}
+            return JsonResponse(newpostcontext, status=200)    
+            
 @login_required
 def following(request):
 

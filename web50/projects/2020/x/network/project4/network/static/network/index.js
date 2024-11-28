@@ -184,22 +184,22 @@ document.addEventListener('DOMContentLoaded', function() {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        "request_type":"addpost",
+                        "request_type":"editpost",
                         post_text: post_text,
-                        form_id: formId,
+                        post_id: id,
                         
                     }),
                     credentials: 'same-origin'
                     
                     
-                }).then(response => response.json()).then(response_message =>{
+                }).then(response => { if(response.status==200) {response.json().then(response_message =>{
                     var textarea = document.getElementById('compose-post');
                     textarea.value = ''; // Clear the value
                     console.log(response_message);
-                    if(response_message.message== "Post added sucessfully.")
+                    if(response_message.message== "Post edited sucessfully.")
                     {
                         console.log("message received successfully");
-                        alert("New Post Successfully Added");
+                        alert("Post Edited Successfully");
                         var post = document.createElement('div');
                         
                         var postdata= response_message.postdata;
@@ -218,7 +218,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     //alert("something crazy happening");
                    
                     
-                }); 
+                }); }
+            else {
+                console.log("Error occured resubmit");
+            } });
     
                 
             }
