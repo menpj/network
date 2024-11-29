@@ -203,14 +203,23 @@ document.addEventListener('DOMContentLoaded', function() {
                         alert("Post Edited Successfully");
 
                         
+                        
 
 
-                        var post = document.createElement('div');
+                        //var post = document.createElement('div');
                         
                         var postdata= response_message.postdata;
-                        post.id = response_message.postdata.postid;
+                        //post.id = response_message.postdata.postid;
     
-                        post.innerHTML=  `
+
+                        postelement.innerHTML=`<h4>${postdata.postcontent}</h2>
+                        Posted by <a href="/user/${postdata.username}">${postdata.username}</a> with ID ${postdata.userid} on
+                        ${postdata.timestamp}  ,  Likes: ${postdata.likes} 
+                        , <a href='#' data-id={{kw.postid}} data-post="{{kw.postcontent}}" class="edit_link" style="display: inline-block;">Edit</a>
+                        <br>
+                        <br>`;
+
+                        /*post.innerHTML=  `
                             <h4>${postdata.postcontent}</h4>
                             Posted by <a href="/user/${postdata.username}">${postdata.username}</a> with ID ${postdata.userid} on
                             ${postdata.timestamp} , Likes: ${postdata.likes}
@@ -218,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         `;
                         var latestPostContainer = document.querySelector("#posts");
                         document.querySelector("#posts").insertBefore(post, latestPostContainer.firstChild);
-
+                        */
 
     
                     }
