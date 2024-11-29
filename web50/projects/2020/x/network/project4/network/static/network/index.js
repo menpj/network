@@ -146,13 +146,13 @@ document.addEventListener('DOMContentLoaded', function() {
             //console.log('Post ID:',this.id);
             var postelement = document.getElementById(id);
             const csrftoken = getCookie('csrftoken');
-            postelement.innerHTML=`<form name="new-post-forms" id="${id}" method="post">
+            postelement.innerHTML=`<form name="new-post-forms" id="form-${id}" method="post">
             <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">
             <textarea name="postinput" class="form-control" id="compose-posts-${id}" required>${post}</textarea>
             <input type="submit" value="Post" class="btn btn-primary"/>
         </form>`;
         
-        var form_name= document.getElementById(id);
+        var form_name= document.getElementById(`form-${id}`);
         
             form_name.addEventListener('submit', function(event) {
         //document.getElementById('new-post-forms').addEventListener('submit', function(event) {
@@ -168,12 +168,13 @@ document.addEventListener('DOMContentLoaded', function() {
             var formId = this.id;
             
             //console.log('Form with name ' + formName + ' was submitted');
-            console.log('Form id is ' + formId );
-            console.log("Nah testing jimbrutta")
+            console.log('Form id is: ' + formId );
+            console.log(`Post id is: form-${id}`);
+            console.log("Nah testing jimbrutta");
             
-            if (formId===id) {
+            if (formId===`form-${id}`) {
                 event.preventDefault();
-                let post_text = document.querySelector(`#compose-posts-${formId}`).value;
+                let post_text = document.querySelector(`#compose-posts-${id}`).value;
     
                 console.log("Post text is " + post_text);
                 console.log("User is Alan. Form ID is " + formId);
