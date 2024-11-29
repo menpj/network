@@ -200,6 +200,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     {
                         console.log("message received successfully");
                         alert("Post Edited Successfully");
+
+                        
+
+
                         var post = document.createElement('div');
                         
                         var postdata= response_message.postdata;
@@ -213,6 +217,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         `;
                         var latestPostContainer = document.querySelector("#posts");
                         document.querySelector("#posts").insertBefore(post, latestPostContainer.firstChild);
+
+
     
                     }
                     //alert("something crazy happening");
