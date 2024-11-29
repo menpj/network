@@ -51,7 +51,7 @@ def index(request):
         request_type = data.get('request_type')
         
 
-        if request_type == 'addpost':
+        if request_type == 'addpost' and request.user.is_authenticated:
 
 
             print("add post assed")
@@ -76,7 +76,7 @@ def index(request):
             newpostcontext= {"message":message,"postdata":postdat}
             return JsonResponse(newpostcontext, status=200)    
     
-        elif request_type== 'editpost':
+        elif request_type== 'editpost' and request.user.is_authenticated:
 
             print("edit post request received in server")
             data = json.loads(request.body)
@@ -92,8 +92,15 @@ def index(request):
             #post = Post(userid=user,postcontent=post_text,datetim= timezone.now())
             try:
                 post = Post.objects.get(postid=post_id)
-                post.postcontent = post_text
-                post.save()
+                print(f"User who made the post is: {post.userid}")
+                print(f"Check it here: {request.user}")
+                if post.userid == request.user:
+                    post.postcontent = post_text
+                    post.save()
+                else:
+                    return JsonResponse({
+                "error": "Error in user authetication."
+                    }, status=400) 
             except:
                 print("Error in database operations");
                 return JsonResponse({
