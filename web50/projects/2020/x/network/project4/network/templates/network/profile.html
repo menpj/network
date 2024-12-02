@@ -56,6 +56,9 @@
                         <h4>{{kw.postcontent}}</h4>
                         Posted by <a href="/user/{{kw.username}}">{{kw.username}}</a> with ID {{kw.userid}} on
                         {{kw.timestamp}}  ,  Likes: {{kw.likes}}
+                        {% if user.is_authenticated and user.username == username %}
+                        , <a href='#' data-id={{kw.postid}} data-post="{{kw.postcontent}}" class="edit_link" style="display: inline-block;">Edit</a>
+                        {% endif %}
                         <br>
                         <br>
                 </div>

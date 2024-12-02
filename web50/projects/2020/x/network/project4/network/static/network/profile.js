@@ -1,5 +1,138 @@
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+function editlink_func()
+{
 
+    console.log("edit link function called");
+    var edit= document.querySelectorAll(".edit_link");
+    edit.forEach(function(post){
+        post.addEventListener('click',function(event) {
+
+            event.preventDefault();
+            console.log("edit link clicked");
+            var post = this.getAttribute('data-post');
+            var id = this.getAttribute('data-id');
+            console.log('Data Info:', post);
+            console.log('Data ID:', id);
+            //console.log('Post ID:',this.id);
+            var postelement = document.getElementById(id);
+            const csrftoken = getCookie('csrftoken');
+            postelement.innerHTML=`<form name="new-post-forms" id="form-${id}" method="post">
+            <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">
+            <textarea name="postinput" class="form-control" id="compose-posts-${id}" required>${post}</textarea>
+            <input type="submit" value="Post" class="btn btn-primary"/>
+        </form>`;
+        
+        var form_name= document.getElementById(`form-${id}`);
+        
+            form_name.addEventListener('submit', function(event) {
+        //document.getElementById('new-post-forms').addEventListener('submit', function(event) {
+        
+            event.preventDefault();
+            // Your form submission logic here
+            
+            
+
+            
+            
+
+            var formId = this.id;
+            
+            //console.log('Form with name ' + formName + ' was submitted');
+            console.log('Form id is: ' + formId );
+            console.log(`Post id is: form-${id}`);
+            console.log("Nah testing jimbrutta");
+            
+            if (formId===`form-${id}`) {
+                event.preventDefault();
+                let post_text = document.querySelector(`#compose-posts-${id}`).value;
     
+                console.log("Post text is " + post_text);
+                console.log("User is Alan. Form ID is " + formId);
+                fetch('/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "request_type":"editpost",
+                        post_text: post_text,
+                        post_id: id,
+                        
+                    }),
+                    credentials: 'same-origin'
+                    
+                    
+                }).then(response => { if(response.status==200) {response.json().then(response_message =>{
+                    var textarea = document.getElementById('compose-post');
+                    textarea.value = ''; // Clear the value
+                    console.log(response_message);
+                    if(response_message.message== "Post edited sucessfully.")
+                    {
+                        console.log("message received successfully");
+                        alert("Post Edited Successfully");
+
+                        
+                        
+
+
+                        //var post = document.createElement('div');
+                        
+                        var postdata= response_message.postdata;
+                        //post.id = response_message.postdata.postid;
+    
+
+                        postelement.innerHTML=`<h4>${postdata.postcontent}</h2>
+                        Posted by <a href="/user/${postdata.username}">${postdata.username}</a> with ID ${postdata.userid} on
+                        ${postdata.timestamp}  ,  Likes: ${postdata.likes} 
+                        , <a href='#' data-id=${postdata.postid} data-post="${postdata.postcontent}" class="edit_link" style="display: inline-block;">Edit</a>
+                            <br><br>`;
+
+                        /*post.innerHTML=  `
+                            <h4>${postdata.postcontent}</h4>
+                            Posted by <a href="/user/${postdata.username}">${postdata.username}</a> with ID ${postdata.userid} on
+                            ${postdata.timestamp} , Likes: ${postdata.likes}
+                            <br><br>
+                        `;
+                        var latestPostContainer = document.querySelector("#posts");
+                        document.querySelector("#posts").insertBefore(post, latestPostContainer.firstChild);
+                        */
+                        editlink_func();
+    
+                    }
+                    //alert("something crazy happening");
+                   
+                    
+                }); }
+            else {
+                console.log("Error occured resubmit");
+            } });
+    
+                
+            }
+            
+    
+    
+            console.log('Form submitted!');
+        }); 
+        });
+
+    });
+
+}
     
     function add_post(contents) {
     
@@ -66,10 +199,13 @@
                                 <h4>${postdata.postcontent}</h4>
                                 Posted by <a href="/user/${postdata.username}">${postdata.username}</a> with ID ${postdata.userid} on
                                 ${postdata.timestamp} , Likes: ${postdata.likes}
-                                <br><br>
+                                , <a href='#' data-id=${postdata.postid} data-post="${postdata.postcontent}" class="edit_link" style="display: inline-block;">Edit</a>
+                            <br><br>
                             `;
+                            
                             var latestPostContainer = document.querySelector("#latest_post");
                             document.querySelector("#latest_post").insertBefore(post, latestPostContainer.firstChild);
+                            editlink_func();
 
                         }
                         //alert("something crazy happening");
@@ -250,6 +386,129 @@
         
     
         
+
+    var edit= document.querySelectorAll(".edit_link");
+    edit.forEach(function(post){
+        post.addEventListener('click',function(event) {
+
+            event.preventDefault();
+            console.log("edit link clicked");
+            var post = this.getAttribute('data-post');
+            var id = this.getAttribute('data-id');
+            console.log('Data Info:', post);
+            console.log('Data ID:', id);
+            //console.log('Post ID:',this.id);
+            var postelement = document.getElementById(id);
+            const csrftoken = getCookie('csrftoken');
+            postelement.innerHTML=`<form name="new-post-forms" id="form-${id}" method="post">
+            <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">
+            <textarea name="postinput" class="form-control" id="compose-posts-${id}" required>${post}</textarea>
+            <input type="submit" value="Post" class="btn btn-primary"/>
+        </form>`;
+        
+        var form_name= document.getElementById(`form-${id}`);
+        
+            form_name.addEventListener('submit', function(event) {
+        //document.getElementById('new-post-forms').addEventListener('submit', function(event) {
+        
+            event.preventDefault();
+            // Your form submission logic here
+            
+            
+
+            
+            
+
+            var formId = this.id;
+            
+            //console.log('Form with name ' + formName + ' was submitted');
+            console.log('Form id is: ' + formId );
+            console.log(`Post id is: form-${id}`);
+            console.log("Nah testing jimbrutta");
+            
+            if (formId===`form-${id}`) {
+                event.preventDefault();
+                let post_text = document.querySelector(`#compose-posts-${id}`).value;
+    
+                console.log("Post text is " + post_text);
+                console.log("User is Alan. Form ID is " + formId);
+                fetch('/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "request_type":"editpost",
+                        post_text: post_text,
+                        post_id: id,
+                        
+                    }),
+                    credentials: 'same-origin'
+                    
+                    
+                }).then(response => { if(response.status==200) {response.json().then(response_message =>{
+                    var textarea = document.getElementById('compose-post');
+                    textarea.value = ''; // Clear the value
+                    console.log(response_message);
+                    if(response_message.message== "Post edited sucessfully.")
+                    {
+                        console.log("message received successfully");
+                        alert("Post Edited Successfully");
+
+                        
+                        
+
+
+                        //var post = document.createElement('div');
+                        
+                        var postdata= response_message.postdata;
+                        //post.id = response_message.postdata.postid;
+    
+
+                        postelement.innerHTML=`<h4>${postdata.postcontent}</h2>
+                        Posted by <a href="/user/${postdata.username}">${postdata.username}</a> with ID ${postdata.userid} on
+                        ${postdata.timestamp}  ,  Likes: ${postdata.likes} 
+                        , <a href='#' data-id=${postdata.postid} data-post="${postdata.postcontent}" class="edit_link" style="display: inline-block;">Edit</a>
+                            <br><br>`;
+                        editlink_func();
+                        
+                        /*post.innerHTML=  `
+                            <h4>${postdata.postcontent}</h4>
+                            Posted by <a href="/user/${postdata.username}">${postdata.username}</a> with ID ${postdata.userid} on
+                            ${postdata.timestamp} , Likes: ${postdata.likes}
+                            <br><br>
+                        `;
+                        var latestPostContainer = document.querySelector("#posts");
+                        document.querySelector("#posts").insertBefore(post, latestPostContainer.firstChild);
+                        */
+
+    
+                    }
+                    //alert("something crazy happening");
+                   
+                    
+                }); }
+            else {
+                console.log("Error occured resubmit");
+                console.log(`Response message is ${response.error}`);
+                
+            } });
+    
+                
+            }
+            
+    
+    
+            console.log('Form submitted!');
+        }); 
+        });
+
+    });
+
+
+
+
         
     });
     
