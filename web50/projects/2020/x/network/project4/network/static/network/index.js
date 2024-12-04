@@ -374,6 +374,87 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
     });
+    
+
+    
+
+
+
+    var like= document.querySelectorAll(".like_link");
+    like.forEach(function(post){
+        post.addEventListener('click',function(event) {
+
+            event.preventDefault();
+            console.log("like link clicked");
+            var id = this.getAttribute('data-id');
+            console.log('Data ID:', id);
+            //console.log('Post ID:',this.id);
+            var postelement = document.getElementById(id);
+            const csrftoken = getCookie('csrftoken');
+            
+        
+        
+        
+           
+            
+            
+            
+            
+               
+                
+    
+                
+                fetch('', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "request_type":"likepost",
+                        post_id: id,
+                        
+                    }),
+                    credentials: 'same-origin'
+                    
+                    
+                }).then(response => { if(response.status==200) {response.json().then(response_message =>{
+                    //var textarea = document.getElementById(id);
+                   // textarea.value = ''; // Clear the value
+                   alert("Post liked sucessfully.")
+                    console.log(response_message);
+                    if(response_message.message== "Post liked sucessfully")
+                    {
+                        console.log("message received successfully");
+                        alert("Post Liked Successfully");
+
+                        document.getElementById(`${id}-like`).style.display = 'none';
+                        document.getElementById(`${id}-unlike`).style.display = 'inline-block';
+
+    
+                    }
+                    //alert("something crazy happening");
+                   
+                    
+                }); }
+            else {
+                console.log("Error occured resubmit");
+            } });
+    
+                
+            
+    
+    
+         
+
+
+
+
+        });
+
+    });
+
+
 
     
 

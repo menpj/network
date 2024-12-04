@@ -71,4 +71,4 @@ class likelist(models.Model):
         unique_together = ('userid', 'postid')
 
     def __str__(self):
-        return f"{self.watchlistid} created by {self.userid} with lisitng {self.listingid}"
+        return f"{self.likelistid} created by {self.userid} with lisitng {self.postid}"

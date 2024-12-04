@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 import json
-from .models import User,Post,Followers
+from .models import User,Post,Followers, likelist
 from django.utils import timezone
 from django import forms
 import time
@@ -37,7 +37,19 @@ def index(request):
 
         paginator = Paginator(postdat, 10)
         page_obj = paginator.get_page(page)
-        
+
+        if request.user.is_authenticated:
+            like_list  = []
+            for post in page_obj:
+                print(post["postid"])
+                try:
+                    likeStatus= likelist.objects.get(postid=post["postid"],userid=request.user)
+                    like_list.append(post["postid"])
+                except likelist.DoesNotExist:
+                    #like_dict[likeStatus.postid]=False
+                    print(f"user {request.user} has not liked post {post["postid"]}")
+            print(like_list)
+            return render(request, 'network/index.html', {"page_obj": page_obj,"likelist": like_list})
 
         # Return list of posts
         
@@ -115,8 +127,27 @@ def index(request):
             print(f"type of postdat: {type(postdat)}")
             message= "Post edited sucessfully."
             newpostcontext= {"message":message,"postdata":postdat}
-            return JsonResponse(newpostcontext, status=200)    
-            
+            return JsonResponse(newpostcontext, status=200)   
+
+
+        elif request_type=="likepost" and request.user.is_authenticated:
+
+            print("request for liking post received")
+            '''
+            try:
+                user = User.objects.get(username=username)
+                following_add = Followers(userBeta=request.user,userAlpha=user)
+                following_add.save()
+                print("request to add follower recieved")
+            except:
+                print("Error in database operations");
+                return JsonResponse({
+                "error": "Error in database operations try again."
+                    }, status=400)
+            return JsonResponse({
+            "message": "Sucessfully follower added."
+                }, status=200)
+            '''
 @login_required
 def following(request):
 

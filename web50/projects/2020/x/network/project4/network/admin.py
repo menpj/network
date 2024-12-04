@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User,Post,Followers
+from .models import User,Post,Followers,likelist
 
 
 # Register your models here.
@@ -7,3 +7,4 @@ from .models import User,Post,Followers
 admin.site.register(User)
 admin.site.register(Post)
 admin.site.register(Followers)
+admin.site.register(likelist)
