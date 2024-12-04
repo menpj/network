@@ -390,7 +390,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var likeNo= this.getAttribute('data-likeNO');
             console.log(`Number of likes are ${likeNo}`)
             likeNo= parseInt(likeNo);
-            console.log(`Updated like number is ${likeNo}`)
+            //console.log(`Updated like number is ${likeNo}`)
             
             console.log('Data ID:', id);
             //console.log('Post ID:',this.id);

@@ -133,21 +133,23 @@ def index(request):
         elif request_type=="likepost" and request.user.is_authenticated:
 
             print("request for liking post received")
-            '''
+            data = json.loads(request.body)
+            postid= data.get("post_id")
+            print(f"Post ID is {postid}")
             try:
-                user = User.objects.get(username=username)
-                following_add = Followers(userBeta=request.user,userAlpha=user)
-                following_add.save()
-                print("request to add follower recieved")
+                post_data= Post.objects.get(postid=postid)
+                likelist_data = likelist(userid=request.user,postid=post_data)
+                likelist_data.save()
+                print("Post sucessfully liked")
             except:
-                print("Error in database operations");
+                print("Error in database operations")
                 return JsonResponse({
                 "error": "Error in database operations try again."
                     }, status=400)
             return JsonResponse({
             "message": "Sucessfully follower added."
                 }, status=200)
-            '''
+            
 @login_required
 def following(request):
 
