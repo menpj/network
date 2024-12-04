@@ -387,6 +387,11 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             console.log("like link clicked");
             var id = this.getAttribute('data-id');
+            var likeNo= this.getAttribute('data-likeNO');
+            console.log(`Number of likes are ${likeNo}`)
+            likeNo= parseInt(likeNo);
+            console.log(`Updated like number is ${likeNo}`)
+            
             console.log('Data ID:', id);
             //console.log('Post ID:',this.id);
             var postelement = document.getElementById(id);

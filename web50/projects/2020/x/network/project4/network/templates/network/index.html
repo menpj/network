@@ -27,11 +27,11 @@
                         Posted by <a href="/user/{{kw.username}}">{{kw.username}}</a> with ID {{kw.userid}} on
                         {{kw.timestamp}}  ,  Likes: {{kw.likes}}
                         {%if user.is_authenticated and kw.postid in likelist %}
-                           , <a id="{{kw.postid}}-unlike" href='#' data-id={{kw.postid}} class="unlike_link" style="display: inline-block;">Unlike</a>
-                           <a id="{{kw.postid}}-like" href='#' data-id={{kw.postid}} class="like_link" style="display: none;">Like</a>
+                           , <a id="{{kw.postid}}-unlike" href='#' data-id={{kw.postid}} data-likeNO={{kw.likes}} class="unlike_link" style="display: inline-block;">Unlike</a>
+                           <a id="{{kw.postid}}-like" href='#' data-id={{kw.postid}} data-likeNO={{kw.likes}} class="like_link" style="display: none;">Like</a>
                         {% elif user.is_authenticated %}
-                           , <a id="{{kw.postid}}-like" href='#' data-id={{kw.postid}} class="like_link" style="display: inline-block;">Like</a>
-                           <a id="{{kw.postid}}-unlike" href='#' data-id={{kw.postid}} class="unlike_link" style="display: none;">Unlike</a>
+                           , <a id="{{kw.postid}}-like" href='#' data-id={{kw.postid}} data-likeNO={{kw.likes}} class="like_link" style="display: inline-block;">Like</a>
+                           <a id="{{kw.postid}}-unlike" href='#' data-id={{kw.postid}} data-likeNO={{kw.likes}} class="unlike_link" style="display: none;">Unlike</a>
                         {% endif %} 
                         {%if user.is_authenticated and user.id == kw.userid %}
                         , <a href='#' data-id={{kw.postid}} data-post="{{kw.postcontent}}" class="edit_link" style="display: inline-block;">Edit</a>
