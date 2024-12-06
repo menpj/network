@@ -219,12 +219,32 @@ function editlink_func()
                         //post.id = response_message.postdata.postid;
     
 
+                        console.log(`Like status is ${response_message.likestatus}`)
+                        if(response_message.likestatus==false)
+                        {
                         postelement.innerHTML=`<h4>${postdata.postcontent}</h2>
                         Posted by <a href="/user/${postdata.username}">${postdata.username}</a> with ID ${postdata.userid} on
-                        ${postdata.timestamp}  ,  Likes: ${postdata.likes} 
+                        ${postdata.timestamp}  ,<span id="${postdata.postid}-likes">Likes: ${postdata.likes}</span>
+                            ,
+                            <a id="${response_message.postdata.postid}-like" href='#' data-id=${response_message.postdata.postid} data-likeNO=${response_message.postdata.likes} class="like_link" style="display: inline-block;">Like</a>
+                           <a id="${response_message.postdata.postid}-unlike" href='#' data-id=${response_message.postdata.postid} data-likeNO=${response_message.postdata.likes} class="unlike_link" style="display: none;">Unlike</a>
+                            
+                        , <a href='#' data-id=${postdata.postid} data-post="${postdata.postcontent}" class="edit_link" style="display: inline-block;">Edit</a>
+                            <br><br>`;
+                        }
+                        else
+                        {
+                            postelement.innerHTML=`<h4>${postdata.postcontent}</h2>
+                        Posted by <a href="/user/${postdata.username}">${postdata.username}</a> with ID ${postdata.userid} on
+                        ${postdata.timestamp}  ,<span id="${postdata.postid}-likes">Likes: ${postdata.likes}</span>
+                            ,
+                            <a id="${response_message.postdata.postid}-like" href='#' data-id=${response_message.postdata.postid} data-likeNO=${response_message.postdata.likes} class="like_link" style="display: none;">Like</a>
+                           <a id="${response_message.postdata.postid}-unlike" href='#' data-id=${response_message.postdata.postid} data-likeNO=${response_message.postdata.likes} class="unlike_link" style="display: inline-block;">Unlike</a>
+                            
                         , <a href='#' data-id=${postdata.postid} data-post="${postdata.postcontent}" class="edit_link" style="display: inline-block;">Edit</a>
                             <br><br>`;
 
+                        }
                         /*post.innerHTML=  `
                             <h4>${postdata.postcontent}</h4>
                             Posted by <a href="/user/${postdata.username}">${postdata.username}</a> with ID ${postdata.userid} on
@@ -235,6 +255,8 @@ function editlink_func()
                         document.querySelector("#posts").insertBefore(post, latestPostContainer.firstChild);
                         */
                         editlink_func();
+                        like_post();
+                        unlike_post();
     
                     }
                     //alert("something crazy happening");
@@ -594,12 +616,35 @@ function editlink_func()
                         //post.id = response_message.postdata.postid;
     
 
+                        console.log(`Like status is ${response_message.likestatus}`)
+                        if(response_message.likestatus==false)
+                        {
                         postelement.innerHTML=`<h4>${postdata.postcontent}</h2>
                         Posted by <a href="/user/${postdata.username}">${postdata.username}</a> with ID ${postdata.userid} on
-                        ${postdata.timestamp}  ,  Likes: ${postdata.likes} 
+                        ${postdata.timestamp}  ,<span id="${postdata.postid}-likes">Likes: ${postdata.likes}</span>
+                            ,
+                            <a id="${response_message.postdata.postid}-like" href='#' data-id=${response_message.postdata.postid} data-likeNO=${response_message.postdata.likes} class="like_link" style="display: inline-block;">Like</a>
+                           <a id="${response_message.postdata.postid}-unlike" href='#' data-id=${response_message.postdata.postid} data-likeNO=${response_message.postdata.likes} class="unlike_link" style="display: none;">Unlike</a>
+                            
                         , <a href='#' data-id=${postdata.postid} data-post="${postdata.postcontent}" class="edit_link" style="display: inline-block;">Edit</a>
                             <br><br>`;
+                        }
+                        else
+                        {
+                            postelement.innerHTML=`<h4>${postdata.postcontent}</h2>
+                        Posted by <a href="/user/${postdata.username}">${postdata.username}</a> with ID ${postdata.userid} on
+                        ${postdata.timestamp}  ,<span id="${postdata.postid}-likes">Likes: ${postdata.likes}</span>
+                            ,
+                            <a id="${response_message.postdata.postid}-like" href='#' data-id=${response_message.postdata.postid} data-likeNO=${response_message.postdata.likes} class="like_link" style="display: none;">Like</a>
+                           <a id="${response_message.postdata.postid}-unlike" href='#' data-id=${response_message.postdata.postid} data-likeNO=${response_message.postdata.likes} class="unlike_link" style="display: inline-block;">Unlike</a>
+                            
+                        , <a href='#' data-id=${postdata.postid} data-post="${postdata.postcontent}" class="edit_link" style="display: inline-block;">Edit</a>
+                            <br><br>`;
+
+                        }
                         editlink_func();
+                        like_post();
+                        unlike_post();
                         
                         /*post.innerHTML=  `
                             <h4>${postdata.postcontent}</h4>
