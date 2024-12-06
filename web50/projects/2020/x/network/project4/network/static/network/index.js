@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
             //console.log('Post ID:',this.id);
             var postelement = document.getElementById(id);
             const csrftoken = getCookie('csrftoken');
-            fetch('', {
+            fetch('/', {
                     method: 'POST',
                     headers: {
                         'X-CSRFToken': getCookie('csrftoken'),
