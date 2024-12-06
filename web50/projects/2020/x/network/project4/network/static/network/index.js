@@ -396,20 +396,7 @@ document.addEventListener('DOMContentLoaded', function() {
             //console.log('Post ID:',this.id);
             var postelement = document.getElementById(id);
             const csrftoken = getCookie('csrftoken');
-            
-        
-        
-        
-           
-            
-            
-            
-            
-               
-                
-    
-                
-                fetch('', {
+            fetch('', {
                     method: 'POST',
                     headers: {
                         'X-CSRFToken': getCookie('csrftoken'),
@@ -426,16 +413,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 }).then(response => { if(response.status==200) {response.json().then(response_message =>{
                     //var textarea = document.getElementById(id);
                    // textarea.value = ''; // Clear the value
-                   alert("Post liked sucessfully.")
+                   //alert("Post liked sucessfully.")
                     console.log(response_message);
-                    if(response_message.message== "Post liked sucessfully")
+                    if(response_message.message== "Post liked sucessfully.")
                     {
                         console.log("message received successfully");
                         alert("Post Liked Successfully");
 
                         document.getElementById(`${id}-like`).style.display = 'none';
                         document.getElementById(`${id}-unlike`).style.display = 'inline-block';
-
+                        document.getElementById(`${id}-likes`).innerHTML=`Likes: ${response_message.likes}`;
     
                     }
                     //alert("something crazy happening");

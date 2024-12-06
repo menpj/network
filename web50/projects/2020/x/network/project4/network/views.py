@@ -140,6 +140,9 @@ def index(request):
                 post_data= Post.objects.get(postid=postid)
                 likelist_data = likelist(userid=request.user,postid=post_data)
                 likelist_data.save()
+                post_data.likes= post_data.likes+1
+                post_data.save()
+                likes_count= post_data.likes
                 print("Post sucessfully liked")
             except:
                 print("Error in database operations")
@@ -147,7 +150,7 @@ def index(request):
                 "error": "Error in database operations try again."
                     }, status=400)
             return JsonResponse({
-            "message": "Sucessfully follower added."
+            "message": "Post liked sucessfully.","likes": likes_count 
                 }, status=200)
             
 @login_required
