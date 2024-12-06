@@ -68,6 +68,129 @@ document.addEventListener('DOMContentLoaded', function() {
         return cookieValue;
     }
 
+    function like_post()
+    {
+    var like= document.querySelectorAll(".like_link");
+    like.forEach(function(post){
+        post.addEventListener('click',function(event) {
+
+            event.preventDefault();
+            console.log("like link clicked");
+            var id = this.getAttribute('data-id');
+            var likeNo= this.getAttribute('data-likeNO');
+            console.log(`Number of likes are ${likeNo}`)
+            likeNo= parseInt(likeNo);
+            //console.log(`Updated like number is ${likeNo}`)
+            
+            console.log('Data ID:', id);
+            //console.log('Post ID:',this.id);
+            var postelement = document.getElementById(id);
+            const csrftoken = getCookie('csrftoken');
+            fetch('/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "request_type":"likepost",
+                        post_id: id,
+                        
+                    }),
+                    credentials: 'same-origin'
+                    
+                    
+                }).then(response => { if(response.status==200) {response.json().then(response_message =>{
+                    //var textarea = document.getElementById(id);
+                   // textarea.value = ''; // Clear the value
+                   //alert("Post liked sucessfully.")
+                    console.log(response_message);
+                    if(response_message.message== "Post liked sucessfully.")
+                    {
+                        console.log("message received successfully");
+                        //alert("Post Liked Successfully");
+
+                        document.getElementById(`${id}-like`).style.display = 'none';
+                        document.getElementById(`${id}-unlike`).style.display = 'inline-block';
+                        document.getElementById(`${id}-likes`).innerHTML=`Likes: ${response_message.likes}`;
+    
+                    }
+                    //alert("something crazy happening");
+                   
+                    
+                }); }
+            else {
+                console.log("Error occured resubmit");
+            } });
+    
+                
+        });
+
+    });
+    }
+
+
+    function unlike_post()
+    {
+        var unlike= document.querySelectorAll(".unlike_link");
+    unlike.forEach(function(post){
+        post.addEventListener('click',function(event) {
+
+            event.preventDefault();
+            console.log("unlike link clicked");
+            var id = this.getAttribute('data-id');
+            var likeNo= this.getAttribute('data-likeNO');
+            console.log(`Number of likes are ${likeNo}`)
+            likeNo= parseInt(likeNo);
+            //console.log(`Updated like number is ${likeNo}`)
+            
+            console.log('Data ID:', id);
+            //console.log('Post ID:',this.id);
+            var postelement = document.getElementById(id);
+            const csrftoken = getCookie('csrftoken');
+            fetch('', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "request_type":"unlikepost",
+                        post_id: id,
+                        
+                    }),
+                    credentials: 'same-origin'
+                    
+                    
+                }).then(response => { if(response.status==200) {response.json().then(response_message =>{
+                    //var textarea = document.getElementById(id);
+                   // textarea.value = ''; // Clear the value
+                   //alert("Post liked sucessfully.")
+                    console.log(response_message);
+                    if(response_message.message== "Post unliked sucessfully.")
+                    {
+                        console.log("message received successfully");
+                        //alert("Post Unliked Successfully");
+
+                        document.getElementById(`${id}-like`).style.display = 'inline-block';
+                        document.getElementById(`${id}-unlike`).style.display = 'none';
+                        document.getElementById(`${id}-likes`).innerHTML=`Likes: ${response_message.likes}`;
+    
+                    }
+                    //alert("something crazy happening");
+                   
+                    
+                }); }
+            else {
+                console.log("Error occured resubmit");
+            } });
+    
+                
+         });
+
+    });
+    }
+
     function editlink_func()
 {
 
@@ -238,13 +361,17 @@ document.addEventListener('DOMContentLoaded', function() {
                         post.innerHTML=  `
                             <h4>${postdata.postcontent}</h4>
                             Posted by <a href="/user/${postdata.username}">${postdata.username}</a> with ID ${postdata.userid} on
-                            ${postdata.timestamp} , Likes: ${postdata.likes}
+                            ${postdata.timestamp} , <span id="${postdata.postid}-likes">Likes: ${postdata.likes}</span>
+                            , <a id="${response_message.postdata.postid}-like" href='#' data-id=${response_message.postdata.postid} data-likeNO=${response_message.postdata.likes} class="like_link" style="display: inline-block;">Like</a>
+                           <a id="${response_message.postdata.postid}-unlike" href='#' data-id=${response_message.postdata.postid} data-likeNO=${response_message.postdata.likes} class="unlike_link" style="display: none;">Unlike</a>
                             , <a href='#' data-id=${postdata.postid} data-post="${postdata.postcontent}" class="edit_link" style="display: inline-block;">Edit</a>
                             <br><br>
                         `;
                         var latestPostContainer = document.querySelector("#posts");
                         document.querySelector("#posts").insertBefore(post, latestPostContainer.firstChild);
                         editlink_func();
+                        like_post();
+                        unlike_post();
 
                     }
                     //alert("something crazy happening");
@@ -418,7 +545,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if(response_message.message== "Post liked sucessfully.")
                     {
                         console.log("message received successfully");
-                        alert("Post Liked Successfully");
+                        //alert("Post Liked Successfully");
 
                         document.getElementById(`${id}-like`).style.display = 'none';
                         document.getElementById(`${id}-unlike`).style.display = 'inline-block';
@@ -443,6 +570,67 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
         });
+
+    });
+
+
+
+
+    var unlike= document.querySelectorAll(".unlike_link");
+    unlike.forEach(function(post){
+        post.addEventListener('click',function(event) {
+
+            event.preventDefault();
+            console.log("unlike link clicked");
+            var id = this.getAttribute('data-id');
+            var likeNo= this.getAttribute('data-likeNO');
+            console.log(`Number of likes are ${likeNo}`)
+            likeNo= parseInt(likeNo);
+            //console.log(`Updated like number is ${likeNo}`)
+            
+            console.log('Data ID:', id);
+            //console.log('Post ID:',this.id);
+            var postelement = document.getElementById(id);
+            const csrftoken = getCookie('csrftoken');
+            fetch('', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "request_type":"unlikepost",
+                        post_id: id,
+                        
+                    }),
+                    credentials: 'same-origin'
+                    
+                    
+                }).then(response => { if(response.status==200) {response.json().then(response_message =>{
+                    //var textarea = document.getElementById(id);
+                   // textarea.value = ''; // Clear the value
+                   //alert("Post liked sucessfully.")
+                    console.log(response_message);
+                    if(response_message.message== "Post unliked sucessfully.")
+                    {
+                        console.log("message received successfully");
+                        //alert("Post Unliked Successfully");
+
+                        document.getElementById(`${id}-like`).style.display = 'inline-block';
+                        document.getElementById(`${id}-unlike`).style.display = 'none';
+                        document.getElementById(`${id}-likes`).innerHTML=`Likes: ${response_message.likes}`;
+    
+                    }
+                    //alert("something crazy happening");
+                   
+                    
+                }); }
+            else {
+                console.log("Error occured resubmit");
+            } });
+    
+                
+         });
 
     });
 

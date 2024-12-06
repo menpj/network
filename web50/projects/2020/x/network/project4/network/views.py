@@ -152,6 +152,29 @@ def index(request):
             return JsonResponse({
             "message": "Post liked sucessfully.","likes": likes_count 
                 }, status=200)
+        
+        elif request_type=="unlikepost" and request.user.is_authenticated:
+
+            print("request for unliking post received")
+            data = json.loads(request.body)
+            postid= data.get("post_id")
+            print(f"Post ID is {postid}")
+            try:
+                post_data= Post.objects.get(postid=postid)
+                likelist_data = likelist.objects.get(userid=request.user,postid=post_data)
+                likelist_data.delete()
+                post_data.likes= post_data.likes-1
+                post_data.save()
+                likes_count= post_data.likes
+                print("Post sucessfully unliked")
+            except:
+                print("Error in database operations")
+                return JsonResponse({
+                "error": "Error in database operations try again."
+                    }, status=400)
+            return JsonResponse({
+            "message": "Post unliked sucessfully.","likes": likes_count 
+                }, status=200)
             
 @login_required
 def following(request):
