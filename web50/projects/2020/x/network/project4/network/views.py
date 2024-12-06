@@ -210,10 +210,24 @@ def following(request):
         page_obj = paginator.get_page(page)
         
 
+
+
+        like_list  = []
+        for post in page_obj:
+            print(post["postid"])
+            try:
+                likeStatus= likelist.objects.get(postid=post["postid"],userid=request.user)
+                like_list.append(post["postid"])
+            except likelist.DoesNotExist:
+                #like_dict[likeStatus.postid]=False
+                print(f"user {request.user} has not liked post {post["postid"]}")
+        print(like_list)
+        return render(request, 'network/following.html', {"page_obj": page_obj,"likelist": like_list})
+
         # Return list of posts
         
 
-        return render(request, 'network/following.html', {"page_obj": page_obj})
+        #return render(request, 'network/following.html', {"page_obj": page_obj})
         
         #return render(request, "network/index.html")
     
