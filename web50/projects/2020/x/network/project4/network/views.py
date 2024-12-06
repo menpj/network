@@ -109,6 +109,16 @@ def index(request):
                 if post.userid == request.user:
                     post.postcontent = post_text
                     post.save()
+
+
+                    try:
+                        likeStatus= likelist.objects.get(postid=post.postid,userid=request.user)
+                        likeStatus= True
+                        print("post is liked by user")
+                    except likelist.DoesNotExist:
+                        print("post is not liked by user")
+                        likeStatus= False
+
                 else:
                     return JsonResponse({
                 "error": "Error in user authetication."
@@ -126,7 +136,7 @@ def index(request):
             print(f"This is postdata: {postdat}")
             print(f"type of postdat: {type(postdat)}")
             message= "Post edited sucessfully."
-            newpostcontext= {"message":message,"postdata":postdat}
+            newpostcontext= {"message":message,"postdata":postdat,"likestatus":likeStatus}
             return JsonResponse(newpostcontext, status=200)   
 
 
