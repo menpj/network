@@ -1,1 +1,1 @@
- web50/projects/2020/x/venv/
+web50/projects/2020/x/venv/
