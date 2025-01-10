@@ -1,4 +1,4 @@
-X-like social network website for making posts and following users.
+Social network website for making posts and following users.
 
 New Post: Users who are signed in are able to write a new text-based post by filling in text into a text area and then click a button to submit the post.
 
